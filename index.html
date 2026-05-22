@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morfologie Română — Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F3EC; --ink: #1A1612; --muted: #7A6F65; --border: #DDD5C8; --card: #FFFFFF;
+    --red: #C84B2F; --red-light: #F5E8E4;
+    --blue: #2B5EA7; --blue-light: #E8EEF8;
+    --purple: #6B3FA0; --purple-light: #F0EBF8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--cream); font-family: 'DM Sans', sans-serif; color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 3rem 1rem 5rem; }
+
+  .hero { text-align: center; margin-bottom: 3.5rem; animation: fadeUp 0.6s ease both; }
+  .hero .label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 6vw, 52px); font-weight: 700; line-height: 1.15; margin-bottom: 14px; }
+  .hero h1 em { font-style: italic; color: var(--muted); }
+  .hero p { font-size: 16px; color: var(--muted); max-width: 420px; margin: 0 auto; line-height: 1.6; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; width: 100%; max-width: 960px; }
+
+  .quiz-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 20px; padding: 2rem; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; animation: fadeUp 0.6s ease both; display: block; position: relative; overflow: hidden; }
+  .quiz-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 20px 20px 0 0; }
+  .quiz-card.red::before { background: var(--red); }
+  .quiz-card.blue::before { background: var(--blue); }
+  .quiz-card.purple::before { background: var(--purple); }
+  .quiz-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+  .quiz-card:nth-child(2) { animation-delay: 0.1s; }
+  .quiz-card:nth-child(3) { animation-delay: 0.2s; }
+
+  .card-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 1.25rem; }
+  .red .card-icon { background: var(--red-light); }
+  .blue .card-icon { background: var(--blue-light); }
+  .purple .card-icon { background: var(--purple-light); }
+
+  .card-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+  .card-desc { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 1.5rem; }
+
+  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.5rem; }
+  .tag { font-size: 11px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); background: var(--cream); }
+
+  .card-footer { display: flex; justify-content: space-between; align-items: center; }
+  .card-meta { font-size: 13px; color: var(--muted); }
+  .card-btn { padding: 8px 20px; border-radius: 999px; border: none; cursor: pointer; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; transition: opacity 0.15s; }
+  .red .card-btn { background: var(--red); color: #fff; }
+  .blue .card-btn { background: var(--blue); color: #fff; }
+  .purple .card-btn { background: var(--purple); color: #fff; }
+  .card-btn:hover { opacity: 0.85; }
+
+  .footer-note { margin-top: 3rem; font-size: 13px; color: var(--muted); text-align: center; animation: fadeUp 0.6s 0.3s ease both; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 480px) { .cards { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="label">Limba Română &middot; Morfologie</div>
+  <h1>Formarea <em>cuvintelor</em><br>în limba română</h1>
+  <p>Alege un capitol și testează-ți cunoștințele cu întrebări de dificultate progresivă.</p>
+</div>
+
+<div class="cards">
+
+  <a class="quiz-card red" href="quiz-derivare.html">
+    <div class="card-icon">✏️</div>
+    <div class="card-title">Derivarea</div>
+    <div class="card-desc">Formarea cuvintelor noi prin adăugarea de prefixe și sufixe la un cuvânt de bază.</div>
+    <div class="card-tags">
+      <span class="tag">Prefixe</span>
+      <span class="tag">Sufixe</span>
+      <span class="tag">Cuvântul de bază</span>
+      <span class="tag">Tipuri de derivare</span>
+    </div>
+    <div class="card-footer">
+      <span class="card-meta">50 întrebări &middot; 3 niveluri</span>
+      <button class="card-btn">Începe →</button>
+    </div>
+  </a>
+
+  <a class="quiz-card blue" href="quiz-compunere.html">
+    <div class="card-icon">🔗</div>
+    <div class="card-title">Compunerea</div>
+    <div class="card-desc">Unirea a două sau mai multe cuvinte ori elemente de compunere pentru a forma un cuvânt nou.</div>
+    <div class="card-tags">
+      <span class="tag">Alăturare</span>
+      <span class="tag">Subordonare</span>
+      <span class="tag">Abreviere</span>
+      <span class="tag">Recunoaștere</span>
+    </div>
+    <div class="card-footer">
+      <span class="card-meta">50 întrebări &middot; 3 niveluri</span>
+      <button class="card-btn">Începe →</button>
+    </div>
+  </a>
+
+  <a class="quiz-card purple" href="quiz-conversiune.html">
+    <div class="card-icon">🔄</div>
+    <div class="card-title">Conversiunea</div>
+    <div class="card-desc">Schimbarea clasei morfologice a unui cuvânt fără modificarea formei sale.</div>
+    <div class="card-tags">
+      <span class="tag">Adj. → Sb.</span>
+      <span class="tag">Vb. → Sb.</span>
+      <span class="tag">Participiu → Adj.</span>
+      <span class="tag">Contexte ambigue</span>
+    </div>
+    <div class="card-footer">
+      <span class="card-meta">50 întrebări &middot; 3 niveluri</span>
+      <button class="card-btn">Începe →</button>
+    </div>
+  </a>
+
+</div>
+
+<div class="footer-note">Toate quiz-urile conțin explicații detaliate după fiecare răspuns.</div>
+
+</body>
+</html>

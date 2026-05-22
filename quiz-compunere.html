@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Compunerea Cuvintelor în Română</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F3EC;
+    --ink: #1A1612;
+    --muted: #7A6F65;
+    --accent: #2B5EA7;
+    --accent-light: #E8EEF8;
+    --success: #2E6B3E;
+    --success-light: #E4F0E8;
+    --border: #DDD5C8;
+    --card: #FFFFFF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 4rem;
+  }
+  .page-header { text-align: center; margin-bottom: 2.5rem; animation: fadeUp 0.6s ease both; }
+  .page-header .label { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .page-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 5vw, 42px); font-weight: 600; line-height: 1.2; }
+  .page-header h1 span { color: var(--accent); }
+  .page-header p { margin-top: 10px; font-size: 15px; color: var(--muted); }
+  .container { width: 100%; max-width: 640px; }
+  .cat-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; animation: fadeUp 0.6s 0.1s ease both; }
+  .cat-btn { padding: 6px 16px; border-radius: 999px; border: 1.5px solid var(--border); background: var(--card); cursor: pointer; font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--muted); transition: all 0.15s; }
+  .cat-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .cat-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .progress-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; }
+  .progress-track { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s ease; }
+  .progress-text { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .dif-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 500; letter-spacing: 0.05em; margin-bottom: 1rem; }
+  .dif-1 { background: #E4F0E8; color: var(--success); }
+  .dif-2 { background: #FFF3DC; color: #7A5200; }
+  .dif-3 { background: var(--accent-light); color: var(--accent); }
+  .q-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 16px; padding: 2rem; animation: fadeUp 0.35s ease both; margin-bottom: 1rem; }
+  .q-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+  .q-category { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+  .q-difficulty { display: flex; gap: 3px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); display: inline-block; }
+  .dot.on { background: var(--accent); }
+  .q-text { font-family: 'Playfair Display', serif; font-size: 20px; line-height: 1.5; color: var(--ink); margin-bottom: 1.5rem; }
+  .options { display: grid; gap: 10px; }
+  .opt-btn { background: var(--cream); border: 1.5px solid var(--border); border-radius: 10px; padding: 13px 18px; text-align: left; cursor: pointer; font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--ink); transition: all 0.15s; display: flex; align-items: center; gap: 12px; }
+  .opt-letter { width: 26px; height: 26px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; transition: all 0.15s; color: var(--muted); }
+  .opt-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-light); }
+  .opt-btn:hover:not(:disabled) .opt-letter { background: var(--accent); color: #fff; }
+  .opt-btn.correct { background: var(--success-light); border-color: var(--success); }
+  .opt-btn.correct .opt-letter { background: var(--success); color: #fff; }
+  .opt-btn.wrong { background: #FCEBEB; border-color: #A32D2D; }
+  .opt-btn.wrong .opt-letter { background: #A32D2D; color: #fff; }
+  .opt-btn.missed { background: var(--success-light); border-color: var(--success); opacity: 0.6; }
+  .opt-btn.missed .opt-letter { background: var(--success); color: #fff; }
+  .opt-btn:disabled { cursor: default; }
+  .explanation { margin-top: 1rem; padding: 14px 16px; background: #F0F4FC; border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; font-size: 14px; color: var(--ink); line-height: 1.7; display: none; }
+  .explanation.show { display: block; }
+  .explanation strong { color: var(--accent); }
+  .nav-row { display: flex; justify-content: space-between; align-items: center; }
+  .score-pill { font-size: 13px; color: var(--muted); }
+  .score-pill strong { color: var(--ink); }
+  .next-btn { padding: 11px 28px; background: var(--ink); color: #fff; border: none; border-radius: 999px; cursor: pointer; font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500; display: none; transition: opacity 0.15s; }
+  .next-btn.show { display: block; }
+  .next-btn:hover { opacity: 0.8; }
+  .results { background: var(--card); border: 1.5px solid var(--border); border-radius: 16px; padding: 3rem 2rem; text-align: center; animation: fadeUp 0.4s ease both; }
+  .results-score { font-family: 'Playfair Display', serif; font-size: 56px; font-weight: 600; color: var(--ink); line-height: 1; }
+  .results-total { font-size: 18px; color: var(--muted); margin-bottom: 6px; }
+  .results-pct { font-size: 15px; color: var(--muted); margin-bottom: 1.25rem; }
+  .results-msg { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--ink); margin-bottom: 2rem; line-height: 1.4; }
+  .cat-results { display: grid; gap: 8px; margin-bottom: 2rem; text-align: left; }
+  .cat-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--cream); border-radius: 8px; font-size: 14px; }
+  .cat-row .cat-name { color: var(--ink); }
+  .cat-row .cat-score { color: var(--accent); font-weight: 500; }
+  .restart-btn { padding: 13px 36px; background: var(--accent); color: #fff; border: none; border-radius: 999px; cursor: pointer; font-size: 15px; font-family: 'DM Sans', sans-serif; font-weight: 500; transition: opacity 0.15s; }
+  .restart-btn:hover { opacity: 0.85; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 480px) { .q-card { padding: 1.25rem; } .q-text { font-size: 17px; } }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="label">Limba Română &middot; Morfologie</div>
+  <h1>Compunerea <span>Cuvintelor</span></h1>
+  <p>50 de întrebări &mdash; alăturare, abreviere, subordonare</p>
+</div>
+<div class="container">
+  <div class="cat-wrap" id="catWrap"></div>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+    <span class="progress-text" id="progText">0 / 0</span>
+  </div>
+  <div id="quizArea"></div>
+</div>
+
+<script>
+const QUESTIONS = [
+
+  // ═══════════════════════════════════════════════
+  // ALĂTURARE — NIVEL 1
+  // ═══════════════════════════════════════════════
+  { cat: "Alăturare", dif: 1,
+    q: "Ce tip de compunere este <strong>floarea-soarelui</strong>?",
+    opts: ["Subordonare", "Alăturare cu cratimă", "Abreviere", "Conversiune"],
+    ans: 1,
+    exp: "<strong>Alăturarea cu cratimă</strong>: cele două cuvinte (floare + soare) se unesc prin cratimă și formează un cuvânt compus nou." },
+
+  { cat: "Alăturare", dif: 1,
+    q: "Cuvântul compus <strong>bună-ziua</strong> este format prin:",
+    opts: ["Subordonare", "Abreviere", "Alăturare cu cratimă", "Derivare"],
+    ans: 2,
+    exp: "<strong>Bună-ziua</strong> = bună + ziua, unite prin cratimă. Este un compus prin alăturare folosit ca formulă de salut." },
+
+  { cat: "Alăturare", dif: 1,
+    q: "Care dintre următoarele este un cuvânt compus prin <strong>alăturare sudată</strong> (fără cratimă)?",
+    opts: ["floarea-soarelui", "binefăcător", "câine-lup", "bună-dimineața"],
+    ans: 1,
+    exp: "<strong>Binefăcător</strong> = bine + făcător, scris sudat (fără spațiu sau cratimă) — alăturare sudată." },
+
+  { cat: "Alăturare", dif: 1,
+    q: "Cuvântul <strong>untdelemn</strong> este un compus format din:",
+    opts: ["unt + de + lemn", "un + t + de + lemn", "und + elemn", "Nu este cuvânt compus"],
+    ans: 0,
+    exp: "<strong>Untdelemn</strong> = unt + de + lemn (ulei de măsline). Compus prin alăturare sudată din trei elemente." },
+
+  { cat: "Alăturare", dif: 1,
+    q: "Care cuvânt compus este scris <strong>cu cratimă</strong>?",
+    opts: ["binecuvântat", "portmoneu", "câine-lup", "aeroport"],
+    ans: 2,
+    exp: "<strong>Câine-lup</strong> se scrie cu cratimă — alăturare necontopită. Celelalte sunt sudate (fără cratimă)." },
+
+  // ═══════════════════════════════════════════════
+  // SUBORDONARE — NIVEL 1
+  // ═══════════════════════════════════════════════
+  { cat: "Subordonare", dif: 1,
+    q: "Ce tip de compunere este <strong>portbagaj</strong>?",
+    opts: ["Alăturare", "Subordonare", "Abreviere", "Derivare cu prefix"],
+    ans: 1,
+    exp: "<strong>Portbagaj</strong> = port- (poartă) + bagaj. Este compunere prin <strong>subordonare</strong>: primul element este subordonat semantic celui de-al doilea." },
+
+  { cat: "Subordonare", dif: 1,
+    q: "Cuvântul <strong>telecomandă</strong> este format prin subordonare folosind elementul de compunere:",
+    opts: ["tele-", "co-", "man-", "andă"],
+    ans: 0,
+    exp: "Elementul de compunere <strong>tele-</strong> (din greacă, = departe) + comandă → telecomandă (comandă de la distanță)." },
+
+  { cat: "Subordonare", dif: 1,
+    q: "Care este elementul de compunere din <strong>fotografie</strong>?",
+    opts: ["foto- (lumină)", "foto- (apă)", "grafi- (scriere)", "Ambele foto- și -grafie"],
+    ans: 3,
+    exp: "<strong>Foto-</strong> (gr. <em>phos</em> = lumină) + <strong>-grafie</strong> (gr. <em>graphein</em> = a scrie/înregistra) → fotografie = înregistrare cu lumină." },
+
+  { cat: "Subordonare", dif: 1,
+    q: "Cuvântul <strong>geografie</strong> conține elementele de compunere:",
+    opts: ["geo- (pământ) + -grafie (scriere)", "geo- (apă) + -grafie", "geo- (cer) + -logie", "geo- + -fonie"],
+    ans: 0,
+    exp: "<strong>Geo-</strong> (gr. <em>ge</em> = pământ) + <strong>-grafie</strong> (gr. <em>graphein</em> = a descrie) → geografie = descrierea pământului." },
+
+  { cat: "Subordonare", dif: 1,
+    q: "Care dintre cuvinte NU este format prin subordonare cu element de compunere savant?",
+    opts: ["biologie", "termometru", "floarea-soarelui", "telescop"],
+    ans: 2,
+    exp: "<strong>Floarea-soarelui</strong> este compus prin <em>alăturare cu cratimă</em>, nu prin subordonare cu elemente savante." },
+
+  // ═══════════════════════════════════════════════
+  // ABREVIERE — NIVEL 1
+  // ═══════════════════════════════════════════════
+  { cat: "Abreviere", dif: 1,
+    q: "Ce este <strong>ONU</strong>?",
+    opts: ["Un cuvânt derivat", "O abreviere prin inițiale", "Un cuvânt compus prin alăturare", "Un element de compunere"],
+    ans: 1,
+    exp: "<strong>ONU</strong> = Organizația Națiunilor Unite. Este o <strong>abreviere prin inițiale</strong> (acronim)." },
+
+  { cat: "Abreviere", dif: 1,
+    q: "Abrevierea <strong>TV</strong> provine din:",
+    opts: ["Televizor Vechi", "TeleViziune", "Timp Vizual", "Transmisie Video"],
+    ans: 1,
+    exp: "<strong>TV</strong> = <strong>T</strong>ele<strong>V</strong>iziune. Abreviere prin inițiale folosită internațional." },
+
+  { cat: "Abreviere", dif: 1,
+    q: "Care dintre următoarele este un <strong>acronim</strong> (abreviere care se citește ca un cuvânt)?",
+    opts: ["CFR", "UNESCO", "SUA", "km/h"],
+    ans: 1,
+    exp: "<strong>UNESCO</strong> se citește ca un cuvânt întreg (u-nes-co), deci este un <strong>acronim</strong>. CFR și SUA se citesc literă cu literă." },
+
+  { cat: "Abreviere", dif: 1,
+    q: "Cuvântul <strong>radar</strong> provine dintr-o abreviere englezească. Ce înseamnă?",
+    opts: ["Radio Detection And Ranging", "Rapid Aerial Detection And Relay", "Remote Area Data And Radio", "Radio Automatic Direction And Range"],
+    ans: 0,
+    exp: "<strong>RADAR</strong> = <em>Radio Detection And Ranging</em>. A intrat în română ca substantiv comun prin lexicalizarea abrevierii." },
+
+  { cat: "Abreviere", dif: 1,
+    q: "Prescurtarea <strong>prof.</strong> este:",
+    opts: ["Un acronim", "O abreviere grafică (nu se pronunță prescurtat)", "Un cuvânt compus", "Un element de compunere"],
+    ans: 1,
+    exp: "<strong>Prof.</strong> este o <strong>abreviere grafică</strong> — se scrie prescurtat, dar se pronunță întotdeauna <em>profesor</em>." },
+
+  // ═══════════════════════════════════════════════
+  // ALĂTURARE — NIVEL 2
+  // ═══════════════════════════════════════════════
+  { cat: "Alăturare", dif: 2,
+    q: "Care este diferența dintre <strong>alăturarea sudată</strong> și <strong>alăturarea cu cratimă</strong>?",
+    opts: ["Nu există diferență", "Sudată: scris împreună; cu cratimă: unit prin -", "Sudată: folosește prefix; cu cratimă: folosește sufix", "Sudată: două cuvinte separate; cu cratimă: un singur cuvânt"],
+    ans: 1,
+    exp: "<strong>Sudată</strong>: cuvintele se contopesc complet (binefăcător). <strong>Cu cratimă</strong>: cuvintele rămân distincte dar legate (floarea-soarelui)." },
+
+  { cat: "Alăturare", dif: 2,
+    q: "Cuvântul compus <strong>gură-cască</strong> denumește:",
+    opts: ["Un tip de pește", "O persoană care se uită fără să facă nimic", "Un instrument muzical", "Un tip de căpăcele"],
+    ans: 1,
+    exp: "<strong>Gură-cască</strong> = persoană care stă cu gura căscată (curioasă, naivă). Compus prin alăturare cu sens figurat." },
+
+  { cat: "Alăturare", dif: 2,
+    q: "Identificați cuvântul compus prin <strong>alăturare sudată</strong>:",
+    opts: ["cal-de-mare", "prim-ministru", "bunăvoință", "câine-lup"],
+    ans: 2,
+    exp: "<strong>Bunăvoință</strong> = bună + voință, scris complet sudat (fără cratimă sau spațiu)." },
+
+  { cat: "Alăturare", dif: 2,
+    q: "Cum se scrie corect compusul format din <em>bine</em> + <em>venit</em>?",
+    opts: ["bine venit", "bine-venit", "binevenit", "Toate variantele sunt corecte"],
+    ans: 2,
+    exp: "<strong>Binevenit</strong> — adjectiv compus prin alăturare sudată. Dar <em>Bine ai venit!</em> (ca formulă) se scrie separat." },
+
+  { cat: "Alăturare", dif: 2,
+    q: "Care dintre compuse este format prin <strong>alăturare cu prepoziție</strong>?",
+    opts: ["binefăcător", "floarea-soarelui", "bunăstare", "câine"],
+    ans: 1,
+    exp: "<strong>Floarea-soarelui</strong> = floarea + <em>soarelui</em> (genitiv), dar structural include relația de la soare. Alte exemple cu prep.: <em>untdelemn</em> (unt + de + lemn)." },
+
+  // ═══════════════════════════════════════════════
+  // SUBORDONARE — NIVEL 2
+  // ═══════════════════════════════════════════════
+  { cat: "Subordonare", dif: 2,
+    q: "Elementul de compunere <strong>bio-</strong> înseamnă:",
+    opts: ["două", "viață", "carte", "lumină"],
+    ans: 1,
+    exp: "<strong>Bio-</strong> (gr. <em>bios</em>) = viață: biologie, biograf, biodiversitate." },
+
+  { cat: "Subordonare", dif: 2,
+    q: "Care pereche de elemente de compunere sunt <strong>antonime</strong>?",
+    opts: ["macro- și mega-", "micro- și macro-", "tele- și foto-", "bio- și geo-"],
+    ans: 1,
+    exp: "<strong>Micro-</strong> (mic) și <strong>macro-</strong> (mare) sunt antonime: microscop vs. macroeconomie." },
+
+  { cat: "Subordonare", dif: 2,
+    q: "Cuvântul <strong>antropologie</strong> conține elementele:",
+    opts: ["antro- (aer) + -logie", "antropo- (om) + -logie (știință)", "ant- + ro- + logie", "antropo- (animal) + -logie"],
+    ans: 1,
+    exp: "<strong>Antropo-</strong> (gr. <em>anthropos</em> = om) + <strong>-logie</strong> (gr. <em>logos</em> = știință) → antropologie = știința despre om." },
+
+  { cat: "Subordonare", dif: 2,
+    q: "Elementul <strong>-fon / fono-</strong> în <em>microfon</em>, <em>fonologie</em> înseamnă:",
+    opts: ["lumină", "sunet / voce", "scriere", "mișcare"],
+    ans: 1,
+    exp: "<strong>Fono-</strong> (gr. <em>phone</em>) = sunet, voce: microfon, fonologie, saxofon." },
+
+  { cat: "Subordonare", dif: 2,
+    q: "Care cuvânt conține elementul de compunere <strong>-teca</strong> (colecție, depozit)?",
+    opts: ["biblioteca", "tehnică", "fantastică", "practică"],
+    ans: 0,
+    exp: "<strong>Biblio-teca</strong> = biblio- (carte) + -teca (depozit) → bibliotecă = depozit de cărți. Și: discotecă, filmotecă." },
+
+  { cat: "Subordonare", dif: 2,
+    q: "Ce înseamnă elementul de compunere <strong>termo-</strong> din termometru, termostat?",
+    opts: ["apă", "căldură", "viteză", "timp"],
+    ans: 1,
+    exp: "<strong>Termo-</strong> (gr. <em>thermos</em>) = căldură: termometru (măsoară căldura), termostat, termocentrală." },
+
+  { cat: "Subordonare", dif: 2,
+    q: "Cuvântul <strong>cardiovascular</strong> conține elementul <em>cardio-</em> cu sensul:",
+    opts: ["creier", "inimă", "sânge", "plămân"],
+    ans: 1,
+    exp: "<strong>Cardio-</strong> (gr. <em>kardia</em>) = inimă: cardiovascular, cardiologie, cardiogram." },
+
+  // ═══════════════════════════════════════════════
+  // ABREVIERE — NIVEL 2
+  // ═══════════════════════════════════════════════
+  { cat: "Abreviere", dif: 2,
+    q: "Ce tip de abreviere este <strong>TAROM</strong>?",
+    opts: ["Abreviere grafică", "Acronim lexicalizat", "Abreviere prin inițiale citită literal", "Simbol"],
+    ans: 1,
+    exp: "<strong>TAROM</strong> = Transporturile Aeriene ROMâne. Este un <strong>acronim lexicalizat</strong> — se pronunță ca un cuvânt și este simțit ca atare." },
+
+  { cat: "Abreviere", dif: 2,
+    q: "Care abreviere este un <strong>simbol internațional</strong> (nu se citește în română)?",
+    opts: ["prof.", "ONG", "km", "pct."],
+    ans: 2,
+    exp: "<strong>km</strong> (kilometru) este un <strong>simbol metric internațional</strong> — nu se pronunță prescurtat, nu se pune punct după el." },
+
+  { cat: "Abreviere", dif: 2,
+    q: "Abrevierea <strong>ONG</strong> înseamnă:",
+    opts: ["Organizație Non-Guvernamentală", "Organizație Națională de Guvernare", "Oficiu Național de Gestionare", "Ordine Națională Generală"],
+    ans: 0,
+    exp: "<strong>ONG</strong> = <strong>O</strong>rganizație <strong>N</strong>on-<strong>G</strong>uvernamentală. Se citește literă cu literă (O-N-G)." },
+
+  { cat: "Abreviere", dif: 2,
+    q: "Cum se numește procedeul prin care o abreviere devine cuvânt de sine stătător (ex: <em>laser, radar</em>)?",
+    opts: ["Derivare", "Lexicalizarea abrevierii", "Conversiune", "Compunere prin alăturare"],
+    ans: 1,
+    exp: "<strong>Lexicalizarea</strong> = abrevierea devine cuvânt comun: <em>laser</em> (Light Amplification by Stimulated Emission of Radiation) se folosește ca substantiv obișnuit." },
+
+  { cat: "Abreviere", dif: 2,
+    q: "Ce abreviere grafică se folosește pentru <em>etcetera</em>?",
+    opts: ["e.g.", "i.e.", "etc.", "cf."],
+    ans: 2,
+    exp: "<strong>Etc.</strong> = <em>et cetera</em> (lat. = și celelalte). Abreviere grafică; se pronunță întotdeauna <em>et cetera</em> sau <em>și altele</em>." },
+
+  // ═══════════════════════════════════════════════
+  // ALĂTURARE — NIVEL 3
+  // ═══════════════════════════════════════════════
+  { cat: "Alăturare", dif: 3,
+    q: "Care dintre compuse are <strong>structura Adjectiv + Substantiv</strong> (sudat)?",
+    opts: ["floarea-soarelui", "bunăstare", "câine-lup", "gură-cască"],
+    ans: 1,
+    exp: "<strong>Bunăstare</strong> = bună (adj.) + stare (sb.) — structură adj.+sb., scrisă sudat. Stare bună de viață." },
+
+  { cat: "Alăturare", dif: 3,
+    q: "Cuvântul compus <strong>curcubeu</strong> provine din:",
+    opts: ["curc + ubeu", "curcu- + beu (latină: bibo = a bea)", "corabie + u", "Nu este un compus"],
+    ans: 1,
+    exp: "<strong>Curcubeu</strong> provine din lat. <em>curvus</em> (curb) + <em>bibere</em> (a bea) — arcul care pare că bea apa. Compus etimologic sudat." },
+
+  { cat: "Alăturare", dif: 3,
+    q: "Identificați seria în care <strong>toate</strong> cuvintele sunt compuse prin alăturare:",
+    opts: ["binefăcător, floarea-soarelui, untdelemn", "telecomandă, biologie, termometru", "ONU, NATO, TAROM", "prefăcut, rescris, nedrept"],
+    ans: 0,
+    exp: "Toate sunt prin alăturare: <strong>binefăcător</strong> (sudat), <strong>floarea-soarelui</strong> (cu cratimă), <strong>untdelemn</strong> (sudat cu prep.). Celelalte serii conțin elemente savante sau derivate." },
+
+  { cat: "Alăturare", dif: 3,
+    q: "Cuvântul <strong>prim-ministru</strong> se scrie cu cratimă deoarece:",
+    opts: ["Este un împrumut din franceză", "Este o alăturare în care ambele elemente au valoare egală sau apropiată", "Primul element este un prefix", "Este o abreviere"],
+    ans: 1,
+    exp: "Cratima marchează <strong>alăturarea</strong> fără contopire deplină; ambele elemente (prim + ministru) contribuie la sens și își păstrează forma." },
+
+  { cat: "Alăturare", dif: 3,
+    q: "Care este structura morfologică a compusului <strong>ochi-de-pisică</strong>?",
+    opts: ["Sb. + Adj.", "Sb. + Prep. + Sb.", "Vb. + Sb.", "Adj. + Sb."],
+    ans: 1,
+    exp: "<strong>Ochi</strong> (sb.) + <strong>de</strong> (prep.) + <strong>pisică</strong> (sb.) — structură Sb. + Prep. + Sb., compus prin alăturare cu prepoziție, scris cu cratimă." },
+
+  // ═══════════════════════════════════════════════
+  // SUBORDONARE — NIVEL 3
+  // ═══════════════════════════════════════════════
+  { cat: "Subordonare", dif: 3,
+    q: "Care este diferența principală între compunerea prin <strong>subordonare</strong> și compunerea prin <strong>alăturare</strong>?",
+    opts: ["Nu există diferență", "Subordonarea folosește elemente savante (greco-latine); alăturarea folosește cuvinte românești existente", "Subordonarea folosește cratima; alăturarea nu", "Subordonarea formează verbe; alăturarea formează substantive"],
+    ans: 1,
+    exp: "<strong>Subordonarea</strong> combină elemente de compunere de origine greacă sau latină (bio-, geo-, -logie). <strong>Alăturarea</strong> combină cuvinte românești deja existente." },
+
+  { cat: "Subordonare", dif: 3,
+    q: "Cuvântul <strong>psihologie</strong> conține elementele:",
+    opts: ["psih- (suflet) + -ologie (știință)", "psi- + ho- + logie", "psihic + ologie", "psiho- (minte) + -logie (cuvânt)"],
+    ans: 0,
+    exp: "<strong>Psiho-</strong> (gr. <em>psyche</em> = suflet, minte) + <strong>-logie</strong> (gr. <em>logos</em> = știință) → psihologie = știința despre suflet/minte." },
+
+  { cat: "Subordonare", dif: 3,
+    q: "Elementul <strong>-crat / -crație</strong> din <em>democrație</em>, <em>birocrat</em> înseamnă:",
+    opts: ["popor", "putere, guvernare", "lege", "ordine"],
+    ans: 1,
+    exp: "<strong>-crație / -crat</strong> (gr. <em>kratos</em>) = putere, guvernare: demo-crație (puterea poporului), aristo-crație (puterea nobililor)." },
+
+  { cat: "Subordonare", dif: 3,
+    q: "Identificați seria în care <strong>toate</strong> cuvintele sunt formate prin subordonare cu elemente savante:",
+    opts: ["floarea-soarelui, portbagaj, telecomandă", "biologie, geografie, astronomie", "bunăstare, binefăcător, curcubeu", "ONU, UNESCO, TAROM"],
+    ans: 1,
+    exp: "<strong>Biologie</strong> (bio-+-logie), <strong>geografie</strong> (geo-+-grafie), <strong>astronomie</strong> (astro-+-nomie) — toate conțin exclusiv elemente de compunere savante." },
+
+  { cat: "Subordonare", dif: 3,
+    q: "Cuvântul <strong>cronometru</strong> conține elementele (în ordine):",
+    opts: ["crono- (timp) + -metru (măsură)", "cron- (culoare) + -ometru", "crono- (număr) + -metru", "crono- (viteză) + -metru (distanță)"],
+    ans: 0,
+    exp: "<strong>Crono-</strong> (gr. <em>chronos</em> = timp) + <strong>-metru</strong> (gr. <em>metron</em> = măsură) → cronometru = instrument de măsurat timpul." },
+
+  { cat: "Subordonare", dif: 3,
+    q: "Elementul <strong>-nom / -nomie</strong> din <em>astronomie</em>, <em>agronomie</em>, <em>economie</em> înseamnă:",
+    opts: ["număr", "lege, regulă, administrare", "descriere", "origine"],
+    ans: 1,
+    exp: "<strong>-nomie</strong> (gr. <em>nomos</em>) = lege, regulă, administrare: astro-nomie (legile stelelor), eco-nomie (administrarea casei), agro-nomie." },
+
+  // ═══════════════════════════════════════════════
+  // ABREVIERE — NIVEL 3
+  // ═══════════════════════════════════════════════
+  { cat: "Abreviere", dif: 3,
+    q: "Care este diferența dintre un <strong>acronim</strong> și o <strong>abreviere prin inițiale</strong>?",
+    opts: ["Nu există diferență", "Acronimul se citește ca un cuvânt; abrevierea prin inițiale se citește literă cu literă", "Acronimul are punct; abrevierea nu", "Acronimul provine din greacă; abrevierea din latină"],
+    ans: 1,
+    exp: "<strong>Acronim</strong>: se citește ca un cuvânt (NATO, TAROM, UNESCO). <strong>Abreviere prin inițiale</strong>: fiecare literă se citește separat (ONU: O-N-U, SUA: S-U-A)." },
+
+  { cat: "Abreviere", dif: 3,
+    q: "Cuvântul <strong>laser</strong> este un acronim englez. Ce fel de cuvânt a devenit în limba română?",
+    opts: ["A rămas abreviere", "Substantiv comun lexicalizat", "Adjectiv", "Verb"],
+    ans: 1,
+    exp: "<strong>Laser</strong> (Light Amplification by Stimulated Emission of Radiation) a devenit <strong>substantiv comun</strong> în română: un laser, laserul, lasere — complet lexicalizat." },
+
+  { cat: "Abreviere", dif: 3,
+    q: "Care abreviere românească respectă regula <strong>fără punct</strong> la final?",
+    opts: ["prof.", "dl.", "nr.", "UNESCO"],
+    ans: 3,
+    exp: "<strong>Simbolurile și acronimele</strong> (UNESCO, ONU, km, l, kg) se scriu <strong>fără punct</strong>. Abrevierile grafice uzuale (prof., dl., nr.) se scriu <strong>cu punct</strong>." },
+
+  { cat: "Abreviere", dif: 3,
+    q: "Cum se numește abrevierea formată din <strong>prima și ultima literă</strong> a cuvântului (ex: <em>dr.</em> pentru <em>doctor</em>)?",
+    opts: ["Acronim", "Abreviere prin contragere", "Simbol", "Abreviere prin trunchiere"],
+    ans: 1,
+    exp: "<strong>Abrevierea prin contragere</strong>: se păstrează prima și ultima literă (și uneori unele din interior): <em>dr.</em> (doctor), <em>str.</em> (stradă), <em>bd.</em> (boulevard)." },
+
+  { cat: "Abreviere", dif: 3,
+    q: "Termenul <strong>selfie</strong> este un exemplu de:",
+    opts: ["Compunere prin subordonare", "Derivare cu sufix", "Împrumut lexical adaptat", "Abreviere grafică"],
+    ans: 2,
+    exp: "<strong>Selfie</strong> este un <strong>împrumut din engleză</strong> (self + sufix -ie). Nu este o abreviere sau compunere românească, ci un neologism adoptat." },
+
+  // ═══════════════════════════════════════════════
+  // TIPURI MIXTE — NIVEL 3 (recunoaștere și diferențiere)
+  // ═══════════════════════════════════════════════
+  { cat: "Recunoaștere și diferențiere", dif: 3,
+    q: "Identificați procedeul de formare al lui <strong>portmoneu</strong>:",
+    opts: ["Derivare cu prefix", "Compunere prin subordonare (port- + moneu)", "Alăturare sudată", "Abreviere"],
+    ans: 1,
+    exp: "<strong>Portmoneu</strong> = <em>port-</em> (poartă, din fr. <em>porter</em>) + <em>monnaie</em> (monedă) → compunere prin subordonare (împrumut din franceză)." },
+
+  { cat: "Recunoaștere și diferențiere", dif: 3,
+    q: "Care serie conține <strong>trei tipuri diferite</strong> de formare a cuvintelor?",
+    opts: ["binefăcător, bunăstare, curcubeu", "ONU, televizor, biologie", "nedrept, rescrie, dezordine", "floarea-soarelui, câine-lup, gură-cască"],
+    ans: 1,
+    exp: "<strong>ONU</strong> (abreviere) + <strong>televizor</strong> (derivare cu sufix) + <strong>biologie</strong> (compunere prin subordonare) = trei procedee diferite." },
+
+  { cat: "Recunoaștere și diferențiere", dif: 3,
+    q: "Cuvântul <strong>astronaut</strong> conține elementele de compunere:",
+    opts: ["astro- (stea) + -naut (navigator)", "astro- (spațiu) + -naut (om)", "astru- + naut (vitez)", "astro- (lună) + -naut (călător)"],
+    ans: 0,
+    exp: "<strong>Astro-</strong> (gr. <em>astron</em> = stea, corp ceresc) + <strong>-naut</strong> (gr. <em>nautes</em> = navigator, marinar) → astronaut = navigator printre stele." },
+
+  { cat: "Recunoaștere și diferențiere", dif: 3,
+    q: "Care este procedeul prin care <strong>meci</strong>, <strong>fotbal</strong>, <strong>computer</strong> au intrat în limba română?",
+    opts: ["Derivare internă", "Compunere prin subordonare", "Împrumut lexical (neologism)", "Abreviere prin contragere"],
+    ans: 2,
+    exp: "<strong>Împrumutul lexical</strong>: cuvinte preluate din alte limbi (engleză) și adaptate fonetic și morfologic sistemului românesc." },
+
+  { cat: "Recunoaștere și diferențiere", dif: 3,
+    q: "Prin ce procedeu s-a format cuvântul <strong>electrocardiogramă</strong>?",
+    opts: ["Alăturare cu cratimă", "Compunere prin subordonare cu trei elemente savante", "Derivare cu prefix și sufix", "Abreviere lexicalizată"],
+    ans: 1,
+    exp: "<strong>Electro-</strong> (electricitate) + <strong>cardio-</strong> (inimă) + <strong>-gramă</strong> (înregistrare scrisă) → compunere prin subordonare cu trei elemente de origine greacă." },
+
+  { cat: "Recunoaștere și diferențiere", dif: 3,
+    q: "Care enunț despre compunere este <strong>corect</strong>?",
+    opts: [
+      "Toate cuvintele compuse se scriu cu cratimă",
+      "Compunerea și derivarea sunt același procedeu",
+      "Prin compunere se unesc cel puțin două cuvinte sau elemente de compunere pentru a forma un cuvânt nou",
+      "Abrevierea este un tip de derivare"
+    ],
+    ans: 2,
+    exp: "<strong>Compunerea</strong> = procedeu de formare a cuvintelor noi prin unirea a cel puțin două cuvinte sau elemente de compunere. Unele se scriu sudat, altele cu cratimă, altele separat." }
+];
+
+const cats = [...new Set(QUESTIONS.map(q => q.cat))];
+let active = new Set(cats);
+let pool = [], cur = 0, score = 0, catScore = {};
+let answered = false;
+
+function buildPool() {
+  pool = QUESTIONS
+    .filter(q => active.has(q.cat))
+    .sort((a, b) => a.dif - b.dif);
+  cur = 0; score = 0; answered = false;
+  catScore = {};
+  cats.forEach(c => catScore[c] = { right: 0, total: 0 });
+  render();
+}
+
+function renderCats() {
+  const el = document.getElementById('catWrap');
+  el.innerHTML = cats.map((c, i) =>
+    `<button class="cat-btn ${active.has(c) ? 'active' : ''}" data-ci="${i}">${c}</button>`
+  ).join('');
+  el.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const c = cats[+btn.dataset.ci];
+      if (active.has(c)) { if (active.size > 1) active.delete(c); }
+      else active.add(c);
+      renderCats();
+      buildPool();
+    });
+  });
+}
+
+const DIV_LABELS = { 1: 'Ușor', 2: 'Mediu', 3: 'Dificil' };
+
+function render() {
+  const area = document.getElementById('quizArea');
+  const fill = document.getElementById('progFill');
+  const txt = document.getElementById('progText');
+
+  if (!pool.length) {
+    area.innerHTML = '<p style="text-align:center;color:#7A6F65;padding:2rem">Selectează cel puțin o categorie.</p>';
+    fill.style.width = '0%'; txt.textContent = '0 / 0'; return;
+  }
+  if (cur >= pool.length) { showResults(); return; }
+
+  const pct = Math.round((cur / pool.length) * 100);
+  fill.style.width = pct + '%';
+  txt.textContent = `${cur} / ${pool.length}`;
+
+  const q = pool[cur];
+  const letters = ['A', 'B', 'C', 'D'];
+  const dots = [1, 2, 3].map(d => `<span class="dot ${d <= q.dif ? 'on' : ''}"></span>`).join('');
+
+  area.innerHTML = `
+    <div class="q-card">
+      <div class="q-top" style="justify-content:flex-end">
+        <span class="q-difficulty">${dots}</span>
+      </div>
+      <div class="dif-badge dif-${q.dif}">${DIV_LABELS[q.dif]}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options" id="opts">
+        ${q.opts.map((o, i) => `
+          <button class="opt-btn" data-i="${i}">
+            <span class="opt-letter">${letters[i]}</span>${o}
+          </button>`).join('')}
+      </div>
+      <div class="explanation" id="exp">💡 ${q.exp}</div>
+    </div>
+    <div class="nav-row">
+      <span class="score-pill">Scor: <strong>${score}</strong> din ${cur}</span>
+      <button class="next-btn" id="nxt">${cur + 1 < pool.length ? 'Următoarea →' : 'Vezi rezultatele →'}</button>
+    </div>
+  `;
+
+  document.querySelectorAll('.opt-btn').forEach(b => {
+    b.addEventListener('click', () => choose(+b.dataset.i));
+  });
+  document.getElementById('nxt').addEventListener('click', () => { cur++; render(); });
+  answered = false;
+}
+
+function choose(idx) {
+  if (answered) return;
+  answered = true;
+  const q = pool[cur];
+  document.querySelectorAll('.opt-btn').forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.ans) b.classList.add(idx === q.ans ? 'correct' : 'missed');
+    else if (i === idx) b.classList.add('wrong');
+  });
+  catScore[q.cat].total++;
+  if (idx === q.ans) { score++; catScore[q.cat].right++; }
+  document.getElementById('exp').classList.add('show');
+  document.getElementById('nxt').classList.add('show');
+  document.querySelector('.score-pill').innerHTML = `Scor: <strong>${score}</strong> din ${cur + 1}`;
+}
+
+function showResults() {
+  document.getElementById('progFill').style.width = '100%';
+  document.getElementById('progText').textContent = `${pool.length} / ${pool.length}`;
+  const pct = Math.round((score / pool.length) * 100);
+  const msg = pct >= 85 ? 'Felicitări! Ești expert în compunerea cuvintelor.' :
+              pct >= 70 ? 'Foarte bine! Stăpânești bine morfologia limbii române.' :
+              pct >= 50 ? 'Bine! Mai exersează categoriile mai dificile.' :
+                          'Continuă să studiezi! Cu practică vei reuși.';
+
+  const catRows = Object.entries(catScore)
+    .filter(([, v]) => v.total > 0)
+    .map(([c, v]) => `<div class="cat-row"><span class="cat-name">${c}</span><span class="cat-score">${v.right}/${v.total}</span></div>`)
+    .join('');
+
+  document.getElementById('quizArea').innerHTML = `
+    <div class="results">
+      <div class="results-score">${score}/${pool.length}</div>
+      <div class="results-total">răspunsuri corecte</div>
+      <div class="results-pct">${pct}% din total</div>
+      <div class="results-msg">${msg}</div>
+      <div class="cat-results">${catRows}</div>
+      <button class="restart-btn" id="rb">Încearcă din nou</button>
+    </div>
+  `;
+  document.getElementById('rb').addEventListener('click', () => { buildPool(); renderCats(); });
+}
+
+renderCats();
+buildPool();
+</script>
+</body>
+</html>

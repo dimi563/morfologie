@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Derivarea Cuvintelor în Română</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F3EC;
+    --ink: #1A1612;
+    --muted: #7A6F65;
+    --accent: #C84B2F;
+    --accent-light: #F5E8E4;
+    --success: #2E6B3E;
+    --success-light: #E4F0E8;
+    --border: #DDD5C8;
+    --card: #FFFFFF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 4rem;
+  }
+  .page-header { text-align: center; margin-bottom: 2.5rem; animation: fadeUp 0.6s ease both; }
+  .page-header .label { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .page-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 5vw, 42px); font-weight: 600; line-height: 1.2; }
+  .page-header h1 span { color: var(--accent); }
+  .page-header p { margin-top: 10px; font-size: 15px; color: var(--muted); }
+  .container { width: 100%; max-width: 640px; }
+  .cat-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; animation: fadeUp 0.6s 0.1s ease both; }
+  .cat-btn { padding: 6px 16px; border-radius: 999px; border: 1.5px solid var(--border); background: var(--card); cursor: pointer; font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--muted); transition: all 0.15s; }
+  .cat-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .cat-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .progress-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; }
+  .progress-track { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s ease; }
+  .progress-text { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .dif-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 500; letter-spacing: 0.05em; margin-bottom: 1rem; }
+  .dif-1 { background: #E4F0E8; color: var(--success); }
+  .dif-2 { background: #FFF3DC; color: #7A5200; }
+  .dif-3 { background: var(--accent-light); color: var(--accent); }
+  .q-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 16px; padding: 2rem; animation: fadeUp 0.35s ease both; margin-bottom: 1rem; }
+  .q-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+  .q-category { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+  .q-difficulty { display: flex; gap: 3px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); display: inline-block; }
+  .dot.on { background: var(--accent); }
+  .q-text { font-family: 'Playfair Display', serif; font-size: 20px; line-height: 1.5; color: var(--ink); margin-bottom: 1.5rem; }
+  .options { display: grid; gap: 10px; }
+  .opt-btn { background: var(--cream); border: 1.5px solid var(--border); border-radius: 10px; padding: 13px 18px; text-align: left; cursor: pointer; font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--ink); transition: all 0.15s; display: flex; align-items: center; gap: 12px; }
+  .opt-letter { width: 26px; height: 26px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; transition: all 0.15s; color: var(--muted); }
+  .opt-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-light); }
+  .opt-btn:hover:not(:disabled) .opt-letter { background: var(--accent); color: #fff; }
+  .opt-btn.correct { background: var(--success-light); border-color: var(--success); }
+  .opt-btn.correct .opt-letter { background: var(--success); color: #fff; }
+  .opt-btn.wrong { background: var(--accent-light); border-color: var(--accent); }
+  .opt-btn.wrong .opt-letter { background: var(--accent); color: #fff; }
+  .opt-btn.missed { background: var(--success-light); border-color: var(--success); opacity: 0.6; }
+  .opt-btn.missed .opt-letter { background: var(--success); color: #fff; }
+  .opt-btn:disabled { cursor: default; }
+  .explanation { margin-top: 1rem; padding: 14px 16px; background: #FFF8F0; border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; font-size: 14px; color: var(--ink); line-height: 1.7; display: none; }
+  .explanation.show { display: block; }
+  .explanation strong { color: var(--accent); }
+  .nav-row { display: flex; justify-content: space-between; align-items: center; }
+  .score-pill { font-size: 13px; color: var(--muted); }
+  .score-pill strong { color: var(--ink); }
+  .next-btn { padding: 11px 28px; background: var(--ink); color: #fff; border: none; border-radius: 999px; cursor: pointer; font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500; display: none; transition: opacity 0.15s; }
+  .next-btn.show { display: block; }
+  .next-btn:hover { opacity: 0.8; }
+  .results { background: var(--card); border: 1.5px solid var(--border); border-radius: 16px; padding: 3rem 2rem; text-align: center; animation: fadeUp 0.4s ease both; }
+  .results-score { font-family: 'Playfair Display', serif; font-size: 56px; font-weight: 600; color: var(--ink); line-height: 1; }
+  .results-total { font-size: 18px; color: var(--muted); margin-bottom: 6px; }
+  .results-pct { font-size: 15px; color: var(--muted); margin-bottom: 1.25rem; }
+  .results-msg { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--ink); margin-bottom: 2rem; line-height: 1.4; }
+  .cat-results { display: grid; gap: 8px; margin-bottom: 2rem; text-align: left; }
+  .cat-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--cream); border-radius: 8px; font-size: 14px; }
+  .cat-row .cat-name { color: var(--ink); }
+  .cat-row .cat-score { color: var(--accent); font-weight: 500; }
+  .restart-btn { padding: 13px 36px; background: var(--accent); color: #fff; border: none; border-radius: 999px; cursor: pointer; font-size: 15px; font-family: 'DM Sans', sans-serif; font-weight: 500; transition: opacity 0.15s; }
+  .restart-btn:hover { opacity: 0.85; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 480px) { .q-card { padding: 1.25rem; } .q-text { font-size: 17px; } }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="label">Limba Română &middot; Morfologie</div>
+  <h1>Derivarea <span>Cuvintelor</span></h1>
+  <p>50 de întrebări &mdash; dificultate progresivă</p>
+</div>
+<div class="container">
+  <div class="cat-wrap" id="catWrap"></div>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+    <span class="progress-text" id="progText">0 / 0</span>
+  </div>
+  <div id="quizArea"></div>
+</div>
+
+<script>
+const QUESTIONS = [
+  // ── NIVEL 1 ─────────────────────────────────────────────────────────────────
+  { cat: "Prefixe", dif: 1, q: "Ce prefix s-a adăugat pentru a forma cuvântul <strong>nebun</strong>?", opts: ["des-", "ne-", "re-", "in-"], ans: 1, exp: "Prefixul <strong>ne-</strong> exprimă negația. Nebun = nu este bun la minte." },
+  { cat: "Prefixe", dif: 1, q: "Cuvântul <strong>reface</strong> conține prefixul:", opts: ["re-", "ra-", "ri-", "ru-"], ans: 0, exp: "Prefixul <strong>re-</strong> indică repetarea acțiunii: a face din nou." },
+  { cat: "Sufixe", dif: 1, q: "Ce sufix formează substantivul <strong>cântăreț</strong> din verbul <em>a cânta</em>?", opts: ["-eț", "-tor", "-ție", "-are"], ans: 0, exp: "Sufixul <strong>-eț</strong> formează substantive ce denumesc persoane: cântăreț, dansatoreț." },
+  { cat: "Sufixe", dif: 1, q: "Cuvântul <strong>frumusețe</strong> s-a format din <em>frumos</em> prin sufixul:", opts: ["-ețe", "-ime", "-ătate", "-ință"], ans: 0, exp: "Sufixul <strong>-ețe</strong> formează substantive abstracte din adjective: frumos → frumusețe." },
+  { cat: "Cuvântul de bază", dif: 1, q: "Care este cuvântul de bază al derivatului <strong>floricea</strong>?", opts: ["floric", "florice", "floare", "flora"], ans: 2, exp: "Cuvântul de bază este <strong>floare</strong> (floa- → flori- + sufix diminutival -cea)." },
+  { cat: "Cuvântul de bază", dif: 1, q: "Cuvântul de bază al lui <strong>scriitor</strong> este:", opts: ["script", "a scrie", "scriere", "scris"], ans: 1, exp: "Derivarea: <strong>a scrie</strong> + sufix -itor → scriitor." },
+  { cat: "Prefixe", dif: 1, q: "Care dintre cuvinte conține prefixul <strong>des-</strong>?", opts: ["descântec", "dealer", "desen", "destin"], ans: 0, exp: "<strong>Descântec</strong> = des- + cântec. Celelalte nu sunt formate prin derivare cu prefix." },
+  { cat: "Sufixe", dif: 1, q: "Sufixul <strong>-ar</strong> din <em>lemnăr</em>, <em>fierar</em> indică:", opts: ["Un obiect", "O meserie sau ocupație", "O calitate", "O acțiune"], ans: 1, exp: "Sufixul <strong>-ar</strong> formează substantive care denumesc meserii: lemnar, fierar, cizmar." },
+  { cat: "Tipuri de derivare", dif: 1, q: "Derivarea prin adăugarea unui element la ÎNCEPUTUL cuvântului se numește:", opts: ["Sufixare", "Prefixare", "Compunere", "Conversiune"], ans: 1, exp: "<strong>Prefixarea</strong> = adăugarea unui prefix la începutul cuvântului de bază." },
+  { cat: "Tipuri de derivare", dif: 1, q: "Derivarea prin adăugarea unui element la SFÂRȘITUL cuvântului se numește:", opts: ["Prefixare", "Conversiune", "Sufixare", "Abreviere"], ans: 2, exp: "<strong>Sufixarea</strong> = adăugarea unui sufix la sfârșitul rădăcinii cuvântului de bază." },
+
+  // ── NIVEL 1-2 ────────────────────────────────────────────────────────────────
+  { cat: "Prefixe", dif: 2, q: "Care este cuvântul de bază al lui <strong>desface</strong>?", opts: ["des", "face", "desfa", "desfac"], ans: 1, exp: "Prefixul <strong>des-</strong> + cuvântul de bază <strong>face</strong>. Des- exprimă o acțiune inversă." },
+  { cat: "Prefixe", dif: 2, q: "Prefixul <strong>stră-</strong> din <em>strănepot</em> exprimă:", opts: ["Negație", "Repetiție", "Grad mai îndepărtat al rudeniei", "Locul"], ans: 2, exp: "Prefixul <strong>stră-</strong> indică un grad de rudenie mai îndepărtat: strănepot, străbunic." },
+  { cat: "Sufixe", dif: 2, q: "Ce sufix s-a folosit pentru a forma adjectivul <strong>muncitor</strong> din verbul <em>a munci</em>?", opts: ["-or", "-tor", "-itor", "-ător"], ans: 2, exp: "Sufixul <strong>-itor</strong> formează adjective sau substantive din verbe: a munci → muncitor." },
+  { cat: "Sufixe", dif: 2, q: "Care sufix formează diminutive în limba română?", opts: ["-esc", "-ușă / -uleț", "-tor", "-itate"], ans: 1, exp: "Sufixele <strong>-ușă, -uleț, -ică, -el</strong> formează diminutive: casă → căsuță, lup → lupuleț." },
+  { cat: "Cuvântul de bază", dif: 2, q: "Care este cuvântul de bază al lui <strong>înflori</strong>?", opts: ["în", "flori", "floare", "florit"], ans: 2, exp: "Prefix <strong>în-</strong> + <strong>floare</strong> (cu modificare fonetică) → a înflori." },
+  { cat: "Cuvântul de bază", dif: 2, q: "<strong>Dezamăgi</strong> provine din:", opts: ["amăgi", "măgi", "amăgeală", "dez"], ans: 0, exp: "Prefix <strong>dez-</strong> + <strong>amăgi</strong> → dezamăgi (a face să piardă iluzia)." },
+  { cat: "Prefixe", dif: 2, q: "Care dintre cuvinte NU conține un prefix?", opts: ["nedrept", "rescrie", "deal", "dezordine"], ans: 2, exp: "<strong>Deal</strong> nu are prefix — este un substantiv simplu. Celelalte: ne-+drept, re-+scrie, dez-+ordine." },
+  { cat: "Sufixe", dif: 2, q: "<strong>Școlăresc</strong> s-a format din <em>școlar</em> cu sufixul:", opts: ["-esc", "-ime", "-enie", "-ătate"], ans: 0, exp: "Sufixul <strong>-esc</strong> formează adjective care exprimă apartenența: școlar → școlăresc." },
+  { cat: "Tipuri de derivare", dif: 2, q: "<em>Postul</em> (de televiziune) față de <em>a posta</em> este un exemplu de:", opts: ["Prefixare", "Sufixare", "Conversiune", "Compunere"], ans: 2, exp: "<strong>Conversiunea</strong> = trecerea unui cuvânt dintr-o clasă morfologică în alta fără afixe." },
+  { cat: "Sufixe", dif: 2, q: "Sufixul <strong>-ătate</strong> formează:", opts: ["Verbe", "Adjective", "Substantive abstracte", "Adverbe"], ans: 2, exp: "Sufixul <strong>-ătate</strong> formează substantive abstracte din adjective: bun → bunătate, liber → libertate." },
+
+  // ── NIVEL 2 ─────────────────────────────────────────────────────────────────
+  { cat: "Prefixe", dif: 2, q: "Prefixele <strong>in-</strong> și <strong>im-</strong> din <em>incorect</em> și <em>imposibil</em> exprimă:", opts: ["Repetiție", "Negație", "Loc", "Timp"], ans: 1, exp: "Prefixele <strong>in- / im-</strong> (variante fonetice) exprimă negația: incorect = nu este corect." },
+  { cat: "Sufixe", dif: 2, q: "Prin ce sufix s-a format substantivul <strong>alergare</strong> din verbul <em>a alerga</em>?", opts: ["-re", "-are", "-ere", "-ire"], ans: 1, exp: "Verbele de conjugarea I (în -a) formează substantive verbale cu sufixul <strong>-are</strong>: a alerga → alergare." },
+  { cat: "Cuvântul de bază", dif: 2, q: "Care este cuvântul de bază al lui <strong>răsfăța</strong>?", opts: ["răs", "față", "făța", "răsfăț"], ans: 1, exp: "Prefix <strong>răs-</strong> + cuvântul de bază <strong>față</strong> (cu sens de a trata cu fața, a alinta)." },
+  { cat: "Cuvântul de bază", dif: 2, q: "Cuvântul <strong>îmbătrâni</strong> conține cuvântul de bază:", opts: ["îm", "bătrân", "trân", "bătrâni"], ans: 1, exp: "Prefix <strong>îm-</strong> (în-) + <strong>bătrân</strong> + sufix -i → a îmbătrâni." },
+  { cat: "Sufixe", dif: 2, q: "Ce sufix formează adverbe de mod din adjective (ex: <em>frumos → frumos</em>)?", opts: ["Niciun sufix (forma e identică)", "-mente", "-ește", "-nic"], ans: 0, exp: "În română, multe adverbe de mod sunt <strong>identice</strong> cu forma de masculin singular a adjectivului: frumos, repede." },
+  { cat: "Prefixe", dif: 2, q: "Prefixul <strong>răs- / răz-</strong> în <em>răscoli</em>, <em>răzbate</em> exprimă:", opts: ["Negație", "Intensitate sau acțiune repetată", "Loc", "Origine"], ans: 1, exp: "Prefixul <strong>răs- / răz-</strong> exprimă intensitate sau repetarea acțiunii: răscoli = a coli din nou/intens." },
+  { cat: "Tipuri de derivare", dif: 2, q: "Care pereche ilustrează corect derivarea cu sufix de la adjectiv la substantiv?", opts: ["bun → bunătate", "a scrie → scriere", "carte → cărticică", "a citi → cititor"], ans: 0, exp: "<strong>Bun → bunătate</strong> (adjectiv + sufix -ătate → substantiv abstract). Celelalte: verb→substantiv, substantiv→diminutiv, verb→substantiv agent." },
+  { cat: "Tipuri de derivare", dif: 2, q: "<strong>Cărticică</strong> față de <em>carte</em> reprezintă derivare cu:", opts: ["Prefix", "Sufix diminutival", "Sufix augmentativ", "Conversiune"], ans: 1, exp: "Sufixul <strong>-ică</strong> este diminutival: carte → cărticică (carte mică)." },
+  { cat: "Prefixe", dif: 2, q: "Câte prefixe are cuvântul <strong>nerecunoscut</strong>?", opts: ["Unul", "Două", "Trei", "Niciunul"], ans: 1, exp: "Cuvântul are <strong>două</strong> prefixe: ne- + re- + cunoscut." },
+  { cat: "Sufixe", dif: 2, q: "Sufixul <strong>-ism</strong> în <em>realism</em>, <em>romantism</em> formează:", opts: ["Adjective", "Verbe", "Substantive care denumesc curente sau doctrine", "Adverbe"], ans: 2, exp: "Sufixul <strong>-ism</strong> formează substantive ce denumesc curente, doctrine sau concepții: realism, socialism." },
+
+  // ── NIVEL 2-3 ────────────────────────────────────────────────────────────────
+  { cat: "Prefixe", dif: 3, q: "Care dintre cuvinte conține prefixul <strong>ante-</strong> cu sensul de <em>înainte</em>?", opts: ["antebelic", "antena", "antet", "antidot"], ans: 0, exp: "<strong>Antebelic</strong> = ante- (înainte) + belic (de război) = dinaintea războiului. Antena și antet nu au prefix ante-." },
+  { cat: "Sufixe", dif: 3, q: "Care sufix formează substantive colective (grupuri)?", opts: ["-ătate", "-ime", "-itor", "-esc"], ans: 1, exp: "Sufixul <strong>-ime</strong> formează colective: tinerime, bătrânime, mulțime, doime." },
+  { cat: "Cuvântul de bază", dif: 3, q: "Care este cuvântul de bază al lui <strong>îndrăzni</strong>?", opts: ["în", "drăzni", "îndrăzneală", "drăzneț"], ans: 1, exp: "Cuvântul de bază (arhaic) este <strong>drăzni</strong>, de la care s-a format îndrăzni prin prefixarea cu în-." },
+  { cat: "Tipuri de derivare", dif: 3, q: "Derivarea <strong>parasintetică</strong> presupune:", opts: ["Adăugarea doar a unui prefix", "Adăugarea doar a unui sufix", "Adăugarea simultană a unui prefix și a unui sufix", "Compunerea a două cuvinte"], ans: 2, exp: "Derivarea <strong>parasintetică</strong> adaugă simultan prefix și sufix: în- + alb + -i → a înălbi." },
+  { cat: "Prefixe", dif: 3, q: "Prefixul <strong>hiper-</strong> în <em>hipermarket</em>, <em>hipertensiune</em> exprimă:", opts: ["Sub nivelul normal", "Deasupra / peste normal", "Negație", "Anterioritate"], ans: 1, exp: "Prefixul <strong>hiper-</strong> (din greacă) exprimă exces, depășire a normalului: hipertensiune = tensiune prea mare." },
+  { cat: "Sufixe", dif: 3, q: "Sufixul <strong>-itudine</strong> în <em>exactitudine</em>, <em>fortitudine</em> formează:", opts: ["Verbe la infinitiv", "Substantive abstracte (calități)", "Adjective", "Adverbe"], ans: 1, exp: "Sufixul <strong>-itudine</strong> (de origine latină) formează substantive abstracte: exactitudine, similitudine." },
+  { cat: "Cuvântul de bază", dif: 3, q: "Cuvântul <strong>întuneric</strong> provine din cuvântul de bază:", opts: ["tuner", "tuneric", "întunecat", "întunec (verb vechi)"], ans: 3, exp: "Forma veche <strong>a întuneca</strong> provine din prefix <em>în-</em> + <em>tunec</em> (întuneric), rădăcină latină <em>tenebra</em>." },
+  { cat: "Tipuri de derivare", dif: 3, q: "Trecerea adjectivului <strong>bine</strong> la adverb fără modificare de formă este un exemplu de:", opts: ["Sufixare", "Prefixare", "Conversiune", "Derivare parasintetică"], ans: 2, exp: "<strong>Conversiunea</strong> = schimbare de clasă morfologică fără adăugare de afixe." },
+  { cat: "Prefixe", dif: 3, q: "Prefixul <strong>inter-</strong> în <em>internațional</em>, <em>interacționa</em> exprimă:", opts: ["Opusul", "Legătura sau acțiunea reciprocă între entități", "Anterioritatea", "Excesul"], ans: 1, exp: "Prefixul <strong>inter-</strong> exprimă relația sau acțiunea <em>între</em> mai multe entități: internațional = între națiuni." },
+  { cat: "Sufixe", dif: 3, q: "Care dintre sufixele de mai jos formează substantive ce denumesc locuri?", opts: ["-ărie", "-itor", "-esc", "-ătate"], ans: 0, exp: "Sufixul <strong>-ărie</strong> poate denumi locuri sau colecții: brutărie, cizmărie, cofetărie." },
+
+  // ── NIVEL 3 ─────────────────────────────────────────────────────────────────
+  { cat: "Tipuri de derivare", dif: 3, q: "Care dintre exemple ilustrează derivarea PARASINTETICĂ?", opts: ["re + face", "în + alb + i (a înălbi)", "cântă + tor", "ne + bun"], ans: 1, exp: "Derivarea <strong>parasintetică</strong> adaugă simultan un prefix și un sufix: în- + alb + -i → a înălbi." },
+  { cat: "Prefixe", dif: 3, q: "Prefixul <strong>sub-</strong> în <em>subsolul</em>, <em>subofițer</em> exprimă:", opts: ["Deasupra", "Dedesubt / grad inferior", "Negație", "Repetiție"], ans: 1, exp: "Prefixul <strong>sub-</strong> exprimă poziție inferioară sau grad mai mic: subsol, subofițer, subestimat." },
+  { cat: "Sufixe", dif: 3, q: "Sufixul <strong>-bil</strong> în <em>posibil</em>, <em>admirabil</em> exprimă:", opts: ["Negație", "Posibilitate sau aptitudine", "Exces", "Loc"], ans: 1, exp: "Sufixul <strong>-bil</strong> exprimă posibilitate: posibil = care poate fi, admirabil = care poate fi admirat." },
+  { cat: "Cuvântul de bază", dif: 3, q: "Care este rădăcina comună a cuvintelor <em>a scrie</em>, <em>scriere</em>, <em>scriitor</em>, <em>inscripție</em>?", opts: ["scri-", "scrie-", "scriber-", "script-"], ans: 0, exp: "Rădăcina <strong>scri-</strong> (din lat. <em>scribere</em>) stă la baza tuturor: a scrie, scriitor, scriere, inscripție." },
+  { cat: "Tipuri de derivare", dif: 3, q: "Cum se numește procedeul prin care un cuvânt dintr-o limbă străină este adaptat sistemului morfologic al limbii române?", opts: ["Conversiune", "Derivare", "Împrumut și adaptare", "Compunere"], ans: 2, exp: "<strong>Împrumutul și adaptarea</strong>: cuvinte precum <em>computer → computer-ul</em> sunt preluate și adaptate fonetic și morfologic." },
+  { cat: "Prefixe", dif: 3, q: "Care pereche de prefixe sunt <strong>antonime</strong> (exprimă sensuri opuse)?", opts: ["pre- și pro-", "hiper- și hipo-", "re- și răs-", "ne- și în-"], ans: 1, exp: "<strong>Hiper-</strong> (peste normal) și <strong>hipo-</strong> (sub normal) sunt antonime: hipertensiune vs. hipotensiune." },
+  { cat: "Sufixe", dif: 3, q: "Sufixul <strong>-tor / -ător</strong> poate forma atât <em>substantive</em> cât și <em>adjective</em>. În <em>cititor de cărți</em> este:", opts: ["Adjectiv", "Substantiv", "Adverb", "Verb"], ans: 1, exp: "În <em>cititor de cărți</em>, <strong>cititor</strong> este <em>substantiv</em> (agent: cel care citește). În <em>un elev cititor</em> este adjectiv." },
+  { cat: "Cuvântul de bază", dif: 3, q: "Identificați seria în care TOATE cuvintele au același cuvânt de bază:", opts: ["înalt, înălțime, înălța, altitudine", "frate, frățesc, înfrăți, frățior", "a merge, mergând, mers, mersul"], ans: 1, exp: "Toate provin din <strong>frate</strong>: frățesc, înfrăți (în- + frate + -i), frățior. Altitudine nu vine din înalt." },
+  { cat: "Tipuri de derivare", dif: 3, q: "Ce tip de derivare s-a folosit la formarea cuvântului <strong>dezrădăcina</strong>?", opts: ["Prefixare simplă", "Sufixare simplă", "Derivare parasintetică", "Conversiune"], ans: 2, exp: "<strong>Dezrădăcina</strong> = prefix <em>dez-</em> + baza <em>rădăcin(ă)</em> + sufix <em>-a</em> → parasintetică (prefix + sufix simultan)." },
+  { cat: "Sufixe", dif: 3, q: "Sufixul <strong>-ean / -an</strong> în <em>moldovean</em>, <em>ardelean</em> formează:", opts: ["Adjective de culoare", "Substantive sau adjective indicând apartenența geografică", "Verbe", "Substantive abstracte"], ans: 1, exp: "Sufixul <strong>-ean / -an</strong> indică proveniența geografică: moldovean, ardelean, oltean, african." },
+  { cat: "Prefixe", dif: 3, q: "Care cuvânt conține un prefix de <strong>origine greacă</strong> cu sensul <em>singur / propriu</em>?", opts: ["autobiografie", "antibiotic", "preistorie", "intercultural"], ans: 0, exp: "<strong>Auto-</strong> (din gr. <em>autos</em> = sine însuși): autobiografie = scriere despre propria viață." }
+];
+
+const cats = [...new Set(QUESTIONS.map(q => q.cat))];
+let active = new Set(cats);
+let pool = [], cur = 0, score = 0, catScore = {};
+let answered = false;
+
+function buildPool() {
+  pool = QUESTIONS
+    .filter(q => active.has(q.cat))
+    .sort((a, b) => a.dif - b.dif);
+  cur = 0; score = 0; answered = false;
+  catScore = {};
+  cats.forEach(c => catScore[c] = { right: 0, total: 0 });
+  render();
+}
+
+function renderCats() {
+  const el = document.getElementById('catWrap');
+  el.innerHTML = cats.map((c, i) =>
+    `<button class="cat-btn ${active.has(c) ? 'active' : ''}" data-ci="${i}">${c}</button>`
+  ).join('');
+  el.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const c = cats[+btn.dataset.ci];
+      if (active.has(c)) { if (active.size > 1) active.delete(c); }
+      else active.add(c);
+      renderCats();
+      buildPool();
+    });
+  });
+}
+
+const DIV_LABELS = { 1: 'Ușor', 2: 'Mediu', 3: 'Dificil' };
+
+function render() {
+  const area = document.getElementById('quizArea');
+  const fill = document.getElementById('progFill');
+  const txt = document.getElementById('progText');
+
+  if (!pool.length) {
+    area.innerHTML = '<p style="text-align:center;color:#7A6F65;padding:2rem">Selectează cel puțin o categorie.</p>';
+    fill.style.width = '0%'; txt.textContent = '0 / 0'; return;
+  }
+  if (cur >= pool.length) { showResults(); return; }
+
+  const pct = Math.round((cur / pool.length) * 100);
+  fill.style.width = pct + '%';
+  txt.textContent = `${cur} / ${pool.length}`;
+
+  const q = pool[cur];
+  const letters = ['A', 'B', 'C', 'D'];
+  const dots = [1, 2, 3].map(d => `<span class="dot ${d <= q.dif ? 'on' : ''}"></span>`).join('');
+
+  area.innerHTML = `
+    <div class="q-card">
+      <div class="q-top">
+        <span class="q-category">${q.cat}</span>
+        <span class="q-difficulty">${dots}</span>
+      </div>
+      <div class="dif-badge dif-${q.dif}">${DIV_LABELS[q.dif]}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options" id="opts">
+        ${q.opts.map((o, i) => `
+          <button class="opt-btn" data-i="${i}">
+            <span class="opt-letter">${letters[i]}</span>${o}
+          </button>`).join('')}
+      </div>
+      <div class="explanation" id="exp">💡 ${q.exp}</div>
+    </div>
+    <div class="nav-row">
+      <span class="score-pill">Scor: <strong>${score}</strong> din ${cur}</span>
+      <button class="next-btn" id="nxt">${cur + 1 < pool.length ? 'Următoarea →' : 'Vezi rezultatele →'}</button>
+    </div>
+  `;
+
+  document.querySelectorAll('.opt-btn').forEach(b => {
+    b.addEventListener('click', () => choose(+b.dataset.i));
+  });
+  document.getElementById('nxt').addEventListener('click', () => { cur++; render(); });
+  answered = false;
+}
+
+function choose(idx) {
+  if (answered) return;
+  answered = true;
+  const q = pool[cur];
+  document.querySelectorAll('.opt-btn').forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.ans) b.classList.add(idx === q.ans ? 'correct' : 'missed');
+    else if (i === idx) b.classList.add('wrong');
+  });
+  catScore[q.cat].total++;
+  if (idx === q.ans) { score++; catScore[q.cat].right++; }
+  document.getElementById('exp').classList.add('show');
+  document.getElementById('nxt').classList.add('show');
+  document.querySelector('.score-pill').innerHTML = `Scor: <strong>${score}</strong> din ${cur + 1}`;
+}
+
+function showResults() {
+  document.getElementById('progFill').style.width = '100%';
+  document.getElementById('progText').textContent = `${pool.length} / ${pool.length}`;
+  const pct = Math.round((score / pool.length) * 100);
+  const msg = pct >= 85 ? 'Felicitări! Ești expert în derivarea cuvintelor.' :
+              pct >= 70 ? 'Foarte bine! Cunoști bine morfologia limbii române.' :
+              pct >= 50 ? 'Bine! Mai exersează categoriile mai dificile.' :
+                          'Continuă să studiezi! Cu practică vei reuși.';
+
+  const catRows = Object.entries(catScore)
+    .filter(([, v]) => v.total > 0)
+    .map(([c, v]) => `<div class="cat-row"><span class="cat-name">${c}</span><span class="cat-score">${v.right}/${v.total}</span></div>`)
+    .join('');
+
+  document.getElementById('quizArea').innerHTML = `
+    <div class="results">
+      <div class="results-score">${score}/${pool.length}</div>
+      <div class="results-total">răspunsuri corecte</div>
+      <div class="results-pct">${pct}% din total</div>
+      <div class="results-msg">${msg}</div>
+      <div class="cat-results">${catRows}</div>
+      <button class="restart-btn" id="rb">Încearcă din nou</button>
+    </div>
+  `;
+  document.getElementById('rb').addEventListener('click', () => { buildPool(); renderCats(); });
+}
+
+renderCats();
+buildPool();
+</script>
+</body>
+</html>

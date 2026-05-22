@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Conversiunea în Română</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F3EC; --ink: #1A1612; --muted: #7A6F65;
+    --accent: #6B3FA0; --accent-light: #F0EBF8;
+    --success: #2E6B3E; --success-light: #E4F0E8;
+    --border: #DDD5C8; --card: #FFFFFF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--cream); font-family: 'DM Sans', sans-serif; color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem 4rem; }
+  .page-header { text-align: center; margin-bottom: 2.5rem; animation: fadeUp 0.6s ease both; }
+  .page-header .label { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .page-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 5vw, 42px); font-weight: 600; line-height: 1.2; }
+  .page-header h1 span { color: var(--accent); }
+  .page-header p { margin-top: 10px; font-size: 15px; color: var(--muted); }
+  .container { width: 100%; max-width: 640px; }
+  .cat-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .cat-btn { padding: 6px 16px; border-radius: 999px; border: 1.5px solid var(--border); background: var(--card); cursor: pointer; font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--muted); transition: all 0.15s; }
+  .cat-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .cat-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .progress-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; }
+  .progress-track { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s ease; }
+  .progress-text { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .dif-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 500; letter-spacing: 0.05em; margin-bottom: 1rem; }
+  .dif-1 { background: #E4F0E8; color: var(--success); }
+  .dif-2 { background: #FFF3DC; color: #7A5200; }
+  .dif-3 { background: var(--accent-light); color: var(--accent); }
+  .q-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 16px; padding: 2rem; animation: fadeUp 0.35s ease both; margin-bottom: 1rem; }
+  .q-top { display: flex; justify-content: flex-end; margin-bottom: 1rem; }
+  .q-difficulty { display: flex; gap: 3px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); display: inline-block; }
+  .dot.on { background: var(--accent); }
+  .q-text { font-family: 'Playfair Display', serif; font-size: 20px; line-height: 1.5; color: var(--ink); margin-bottom: 1.5rem; }
+  .options { display: grid; gap: 10px; }
+  .opt-btn { background: var(--cream); border: 1.5px solid var(--border); border-radius: 10px; padding: 13px 18px; text-align: left; cursor: pointer; font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--ink); transition: all 0.15s; display: flex; align-items: center; gap: 12px; }
+  .opt-letter { width: 26px; height: 26px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; transition: all 0.15s; color: var(--muted); }
+  .opt-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-light); }
+  .opt-btn:hover:not(:disabled) .opt-letter { background: var(--accent); color: #fff; }
+  .opt-btn.correct { background: var(--success-light); border-color: var(--success); }
+  .opt-btn.correct .opt-letter { background: var(--success); color: #fff; }
+  .opt-btn.wrong { background: #FCEBEB; border-color: #A32D2D; }
+  .opt-btn.wrong .opt-letter { background: #A32D2D; color: #fff; }
+  .opt-btn.missed { background: var(--success-light); border-color: var(--success); opacity: 0.6; }
+  .opt-btn.missed .opt-letter { background: var(--success); color: #fff; }
+  .opt-btn:disabled { cursor: default; }
+  .explanation { margin-top: 1rem; padding: 14px 16px; background: #F5F0FC; border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; font-size: 14px; color: var(--ink); line-height: 1.7; display: none; }
+  .explanation.show { display: block; }
+  .explanation strong { color: var(--accent); }
+  .nav-row { display: flex; justify-content: space-between; align-items: center; }
+  .score-pill { font-size: 13px; color: var(--muted); }
+  .score-pill strong { color: var(--ink); }
+  .next-btn { padding: 11px 28px; background: var(--ink); color: #fff; border: none; border-radius: 999px; cursor: pointer; font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500; display: none; transition: opacity 0.15s; }
+  .next-btn.show { display: block; }
+  .next-btn:hover { opacity: 0.8; }
+  .results { background: var(--card); border: 1.5px solid var(--border); border-radius: 16px; padding: 3rem 2rem; text-align: center; animation: fadeUp 0.4s ease both; }
+  .results-score { font-family: 'Playfair Display', serif; font-size: 56px; font-weight: 600; color: var(--ink); line-height: 1; }
+  .results-total { font-size: 18px; color: var(--muted); margin-bottom: 6px; }
+  .results-pct { font-size: 15px; color: var(--muted); margin-bottom: 1.25rem; }
+  .results-msg { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--ink); margin-bottom: 2rem; line-height: 1.4; }
+  .cat-results { display: grid; gap: 8px; margin-bottom: 2rem; text-align: left; }
+  .cat-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--cream); border-radius: 8px; font-size: 14px; }
+  .cat-row .cat-name { color: var(--ink); }
+  .cat-row .cat-score { color: var(--accent); font-weight: 500; }
+  .restart-btn { padding: 13px 36px; background: var(--accent); color: #fff; border: none; border-radius: 999px; cursor: pointer; font-size: 15px; font-family: 'DM Sans', sans-serif; font-weight: 500; transition: opacity 0.15s; }
+  .restart-btn:hover { opacity: 0.85; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 480px) { .q-card { padding: 1.25rem; } .q-text { font-size: 17px; } }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="label">Limba Română &middot; Morfologie</div>
+  <h1>Conversiunea <span>Cuvintelor</span></h1>
+  <p>50 de întrebări &mdash; dificultate progresivă</p>
+</div>
+<div class="container">
+  <div class="cat-wrap" id="catWrap"></div>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+    <span class="progress-text" id="progText">0 / 0</span>
+  </div>
+  <div id="quizArea"></div>
+</div>
+
+<script>
+const QUESTIONS = [
+
+  // ══════════════════════════════════════════
+  // NOȚIUNI GENERALE — NIVEL 1
+  // ══════════════════════════════════════════
+  { cat: "Noțiuni generale", dif: 1,
+    q: "Ce este <strong>conversiunea</strong> în morfologie?",
+    opts: ["Adăugarea unui sufix la un cuvânt", "Schimbarea clasei morfologice a unui cuvânt fără modificarea formei", "Unirea a două cuvinte pentru a forma unul nou", "Prescurtarea unui cuvânt"],
+    ans: 1,
+    exp: "<strong>Conversiunea</strong> = trecerea unui cuvânt dintr-o clasă morfologică în alta <em>fără a adăuga sau elimina ceva</em> din forma sa." },
+
+  { cat: "Noțiuni generale", dif: 1,
+    q: "Conversiunea se mai numește și:",
+    opts: ["Derivare internă", "Schimbare de clasă sau transfer morfologic", "Compunere", "Abreviere"],
+    ans: 1,
+    exp: "Conversiunea se mai numește <strong>schimbare de clasă</strong> sau <strong>transfer morfologic</strong> — același cuvânt, clasă diferită." },
+
+  { cat: "Noțiuni generale", dif: 1,
+    q: "Prin conversiune, forma cuvântului:",
+    opts: ["Se modifică complet", "Rămâne identică — se schimbă doar clasa și funcția", "Primește un prefix nou", "Se prescurtează"],
+    ans: 1,
+    exp: "Esența conversiunii: <strong>forma rămâne identică</strong>, dar cuvântul funcționează ca altă parte de vorbire în context." },
+
+  { cat: "Noțiuni generale", dif: 1,
+    q: "Care pereche ilustrează cel mai bine conversiunea?",
+    opts: ["frumos → frumusețe", "a merge → mersul", "bun (adj.) → binele (sb.)", "ne- + drept → nedrept"],
+    ans: 2,
+    exp: "<strong>Bun</strong> (adjectiv) → <strong>binele</strong> (substantiv) — aceeași rădăcină, clasă morfologică diferită. Celelalte implică derivare." },
+
+  { cat: "Noțiuni generale", dif: 1,
+    q: "Conversiunea este un procedeu de:",
+    opts: ["Flexiune", "Formare a cuvintelor", "Derivare cu sufix zero", "Compunere"],
+    ans: 1,
+    exp: "Conversiunea este un <strong>procedeu de formare a cuvintelor</strong> (alături de derivare și compunere), numit uneori și derivare cu sufix zero." },
+
+  // ══════════════════════════════════════════
+  // ADJECTIV → SUBSTANTIV — NIVEL 1
+  // ══════════════════════════════════════════
+  { cat: "Adjectiv → Substantiv", dif: 1,
+    q: "În propoziția <em>Frumosul din povești nu uită...,</em> cuvântul <strong>frumosul</strong> este:",
+    opts: ["Adjectiv", "Adverb", "Substantiv (prin conversiune)", "Verb"],
+    ans: 2,
+    exp: "<strong>Frumosul</strong> a trecut din adjectiv în <em>substantiv</em> prin conversiune — are articol hotărât și funcție de subiect." },
+
+  { cat: "Adjectiv → Substantiv", dif: 1,
+    q: "În sintagma <em>cei buni</em>, cuvântul <strong>buni</strong> este adjectiv. Dar în <em>binele și răul</em>, <strong>binele</strong> este:",
+    opts: ["Adjectiv", "Adverb", "Substantiv", "Numeral"],
+    ans: 2,
+    exp: "<strong>Binele</strong> și <strong>răul</strong> sunt substantive obținute prin conversiunea adjectivelor <em>bun</em> și <em>rău</em>." },
+
+  { cat: "Adjectiv → Substantiv", dif: 1,
+    q: "Cuvântul <strong>românul</strong> în propoziția <em>Românul s-a născut poet</em> este:",
+    opts: ["Adjectiv", "Substantiv provenit din adjectiv prin conversiune", "Verb", "Pronume"],
+    ans: 1,
+    exp: "<strong>Românul</strong> = adjectivul <em>român</em> transformat în substantiv prin conversiune (cu articol hotărât enclitic)." },
+
+  { cat: "Adjectiv → Substantiv", dif: 1,
+    q: "În <em>cei dragi ai mei</em>, <strong>dragi</strong> este adjectiv. În <em>dragul meu</em>, <strong>dragul</strong> este:",
+    opts: ["Adjectiv", "Adverb", "Interjecție", "Substantiv prin conversiune"],
+    ans: 3,
+    exp: "<strong>Dragul meu</strong> — <em>dragul</em> funcționează ca substantiv (= ființa dragă), obținut prin conversiunea adjectivului <em>drag</em>." },
+
+  { cat: "Adjectiv → Substantiv", dif: 1,
+    q: "Care dintre cuvintele de mai jos este adjectiv convertit în substantiv?",
+    opts: ["veselie", "tristețe", "tristul", "întristare"],
+    ans: 2,
+    exp: "<strong>Tristul</strong> = adjectivul <em>trist</em> + articol hotărât → substantiv prin conversiune. Celelalte sunt formate prin derivare cu sufix." },
+
+  // ══════════════════════════════════════════
+  // VERB → SUBSTANTIV — NIVEL 1-2
+  // ══════════════════════════════════════════
+  { cat: "Verb → Substantiv", dif: 1,
+    q: "În <em>Mersul pe jos este sănătos</em>, cuvântul <strong>mersul</strong> este:",
+    opts: ["Verb la gerunziu", "Substantiv provenit din verb (infinitiv lung)", "Adjectiv", "Adverb"],
+    ans: 1,
+    exp: "<strong>Mersul</strong> = verbul <em>a merge</em> → substantiv (infinitiv lung articulat). Este subiectul propoziției." },
+
+  { cat: "Verb → Substantiv", dif: 1,
+    q: "Cuvântul <strong>scrisul</strong> în <em>Scrisul de mână se pierde</em> este:",
+    opts: ["Participiu", "Substantiv prin conversiunea verbului a scrie", "Adjectiv", "Gerunziu"],
+    ans: 1,
+    exp: "<strong>Scrisul</strong> = infinitivul lung al verbului <em>a scrie</em>, articulat și folosit ca substantiv (subiect)." },
+
+  { cat: "Verb → Substantiv", dif: 2,
+    q: "În <em>Cititul mult te îmbogățește</em>, <strong>cititul</strong> provine din:",
+    opts: ["Supin articulat", "Infinitiv lung articulat", "Participiu articulat", "Gerunziu articulat"],
+    ans: 1,
+    exp: "<strong>Cititul</strong> = infinitivul lung <em>citire</em>... Nu, de fapt: <em>citit</em> (supin) + articol <em>-ul</em> → <strong>supinul articulat</strong> folosit ca substantiv." },
+
+  { cat: "Verb → Substantiv", dif: 2,
+    q: "Care formă verbală poate deveni cel mai ușor substantiv prin conversiune în română?",
+    opts: ["Indicativul prezent", "Infinitivul lung și supinul articulat", "Conjunctivul", "Imperativul"],
+    ans: 1,
+    exp: "<strong>Infinitivul lung</strong> (scriere, citire) și <strong>supinul articulat</strong> (scrisul, cititul) sunt formele verbale cel mai frecvent convertite în substantive." },
+
+  { cat: "Verb → Substantiv", dif: 2,
+    q: "Identificați substantivul provenit dintr-un verb prin conversiune:",
+    opts: ["scriitor", "scriere", "scrisul", "scris (adj.: o scrisoare scrisă)"],
+    ans: 2,
+    exp: "<strong>Scrisul</strong> = supin articulat → substantiv. <em>Scriere</em> e derivat cu sufix. <em>Scriitor</em> e derivat cu sufix agent." },
+
+  // ══════════════════════════════════════════
+  // ADVERB → ALTE CLASE — NIVEL 2
+  // ══════════════════════════════════════════
+  { cat: "Adverb → Alte clase", dif: 2,
+    q: "În <em>Binele pe care l-ai făcut rămâne</em>, <strong>binele</strong> este substantiv. Dar în <em>a scris bine</em>, <strong>bine</strong> este:",
+    opts: ["Substantiv", "Adjectiv", "Adverb de mod", "Verb"],
+    ans: 2,
+    exp: "<strong>Bine</strong> în <em>a scris bine</em> este <em>adverb de mod</em>. Același cuvânt, clasă diferită în funcție de context." },
+
+  { cat: "Adverb → Alte clase", dif: 2,
+    q: "Cuvântul <strong>aproape</strong> în <em>Stă aproape</em> este adverb. În <em>aproape toți</em> este:",
+    opts: ["Adverb de loc", "Adverb cu valoare de adjectiv pronominal", "Prepoziție", "Adverb de cantitate / aproximare"],
+    ans: 3,
+    exp: "În <em>aproape toți</em>, <strong>aproape</strong> are valoare de <em>adverb de cantitate / aproximare</em> — modifică un pronume, nu un verb." },
+
+  { cat: "Adverb → Alte clase", dif: 2,
+    q: "În <em>contra echipei adverse</em>, <strong>contra</strong> este:",
+    opts: ["Adverb", "Substantiv", "Prepoziție (prin conversiune din adverb)", "Adjectiv"],
+    ans: 2,
+    exp: "<strong>Contra</strong> funcționează ca <em>prepoziție</em> în acest context — cere cazul genitiv. A fost inițial adverb, acum s-a convertit." },
+
+  { cat: "Adverb → Alte clase", dif: 2,
+    q: "Cuvântul <strong>gata</strong> în <em>Sunt gata</em> este adjectiv predicativ. În <em>Gata, am terminat!</em> este:",
+    opts: ["Adjectiv", "Adverb", "Interjecție prin conversiune", "Substantiv"],
+    ans: 2,
+    exp: "<strong>Gata!</strong> ca exclamație de sine stătătoare funcționează ca <em>interjecție</em> — același cuvânt, clasă și funcție diferite." },
+
+  { cat: "Adverb → Alte clase", dif: 2,
+    q: "În <em>ieri dimineață</em>, <strong>ieri</strong> este adverb. În <em>ziarul de ieri</em>, <strong>ieri</strong> are valoare de:",
+    opts: ["Adverb de timp", "Adjectiv (atribut)", "Substantiv", "Prepoziție"],
+    ans: 1,
+    exp: "În <em>ziarul de ieri</em>, <strong>ieri</strong> funcționează ca <em>adjectiv / atribut</em> — determină un substantiv (ziarul). Conversiune contextuală." },
+
+  // ══════════════════════════════════════════
+  // PARTICIPIU → ADJECTIV — NIVEL 2
+  // ══════════════════════════════════════════
+  { cat: "Participiu → Adjectiv", dif: 2,
+    q: "În <em>o carte citită</em>, <strong>citită</strong> este:",
+    opts: ["Verb la participiu", "Adjectiv provenit din participiu prin conversiune", "Adverb", "Substantiv"],
+    ans: 1,
+    exp: "<strong>Citită</strong> în <em>o carte citită</em> funcționează ca <em>adjectiv</em> (atribut adjectival) — a fost obținut prin conversiunea participiului verbului <em>a citi</em>." },
+
+  { cat: "Participiu → Adjectiv", dif: 2,
+    q: "Care dintre cuvintele subliniate este participiu convertit în adjectiv?",
+    opts: ["Am <u>scris</u> o scrisoare", "O scrisoare <u>scrisă</u> de mână", "<u>Scriind</u>, a uitat de timp", "El <u>scrie</u> zilnic"],
+    ans: 1,
+    exp: "În <em>o scrisoare <strong>scrisă</strong> de mână</em>, participiul funcționează ca <em>adjectiv</em> — determină substantivul <em>scrisoare</em>." },
+
+  { cat: "Participiu → Adjectiv", dif: 2,
+    q: "Cuvântul <strong>obosit</strong> în <em>un elev obosit</em> este:",
+    opts: ["Verb", "Adverb", "Adjectiv provenit din participiu", "Substantiv"],
+    ans: 2,
+    exp: "<strong>Obosit</strong> în poziție de atribut adjectival este un <em>adjectiv provenit din participiul</em> verbului <em>a obosi</em>." },
+
+  { cat: "Participiu → Adjectiv", dif: 2,
+    q: "Prin ce se deosebește participiul verbal de participiul adjectivizat?",
+    opts: ["Nu se deosebesc", "Participiul verbal formează timpuri compuse; cel adjectivizat determină un substantiv", "Participiul adjectivizat are sufix diferit", "Participiul verbal are articol"],
+    ans: 1,
+    exp: "<strong>Participiu verbal</strong>: <em>Am citit</em> (formează perfectul compus). <strong>Adjectiv din participiu</strong>: <em>cartea citită</em> (determină un substantiv)." },
+
+  // ══════════════════════════════════════════
+  // NUMERAL → ALTE CLASE — NIVEL 2
+  // ══════════════════════════════════════════
+  { cat: "Numeral → Alte clase", dif: 2,
+    q: "În <em>primul elev</em>, <strong>primul</strong> este numeral ordinal. În <em>el este primul</em>, <strong>primul</strong> este:",
+    opts: ["Numeral ordinal cu funcție de atribut", "Substantiv prin conversiune", "Pronume prin conversiune", "Adjectiv"],
+    ans: 2,
+    exp: "<strong>Primul</strong> în <em>el este primul</em> funcționează ca <em>pronume</em> (înlocuiește un substantiv) — conversiune a numeralului ordinal." },
+
+  { cat: "Numeral → Alte clase", dif: 2,
+    q: "Cuvântul <strong>doi</strong> în <em>Veneau câte doi</em> este:",
+    opts: ["Numeral cardinal cu funcție de subiect", "Adverb de mod", "Numeral cu valoare adverbială", "Substantiv"],
+    ans: 2,
+    exp: "În <em>câte doi</em>, <strong>doi</strong> are <em>valoare adverbială</em> — arată modul în care se desfășoară acțiunea (câte doi = în perechi)." },
+
+  { cat: "Numeral → Alte clase", dif: 2,
+    q: "În <em>un zece meritat</em>, <strong>zece</strong> este:",
+    opts: ["Numeral cardinal", "Substantiv prin conversiune", "Adjectiv", "Adverb"],
+    ans: 1,
+    exp: "<strong>Zece</strong> în <em>un zece meritat</em> este <em>substantiv</em> (nota de 10) — numeralul s-a convertit în substantiv (are articol nehotărât)." },
+
+  // ══════════════════════════════════════════
+  // SUBSTANTIV → ALTE CLASE — NIVEL 2-3
+  // ══════════════════════════════════════════
+  { cat: "Substantiv → Alte clase", dif: 2,
+    q: "În <em>o rochie mov</em>, <strong>mov</strong> este:",
+    opts: ["Substantiv", "Adverb", "Adjectiv prin conversiune din substantiv", "Verb"],
+    ans: 2,
+    exp: "<strong>Mov</strong> este inițial un substantiv (culoarea). În <em>rochie mov</em> funcționează ca <em>adjectiv</em> (atribut) — conversiune." },
+
+  { cat: "Substantiv → Alte clase", dif: 2,
+    q: "Cuvântul <strong>roz</strong> în <em>bluza roz</em> este:",
+    opts: ["Substantiv", "Adjectiv prin conversiune", "Adverb", "Interjecție"],
+    ans: 1,
+    exp: "Ca și <em>mov</em>, <strong>roz</strong> este inițial un substantiv (culoarea) care s-a convertit în <em>adjectiv</em> în contexte de tipul <em>bluza roz</em>." },
+
+  { cat: "Substantiv → Alte clase", dif: 3,
+    q: "În <em>Doamne, ajută!</em>, <strong>Doamne</strong> este:",
+    opts: ["Substantiv în cazul vocativ", "Substantiv convertit în interjecție", "Adjectiv", "Verb"],
+    ans: 1,
+    exp: "<strong>Doamne</strong> în exclamații funcționează ca <em>interjecție</em> — provine din substantivul <em>Domn</em> la vocativ, convertit prin uz." },
+
+  // ══════════════════════════════════════════
+  // GERUNZIU → ALTE CLASE — NIVEL 3
+  // ══════════════════════════════════════════
+  { cat: "Gerunziu → Alte clase", dif: 3,
+    q: "În <em>apă curgătoare</em>, <strong>curgătoare</strong> este:",
+    opts: ["Verb la gerunziu", "Adjectiv provenit din gerunziu prin conversiune", "Substantiv", "Adverb"],
+    ans: 1,
+    exp: "<strong>Curgătoare</strong> provine din gerunziul <em>curgând</em>, dar funcționează ca <em>adjectiv</em> (determină substantivul <em>apă</em>)." },
+
+  { cat: "Gerunziu → Alte clase", dif: 3,
+    q: "Cuvântul <strong>arzător</strong> în <em>o problemă arzătoare</em> provine din:",
+    opts: ["Substantiv", "Gerunziu / participiu activ convertit în adjectiv", "Derivare cu sufix -ător", "Compunere"],
+    ans: 2,
+    exp: "<strong>Arzătoare</strong> este adjectiv format prin conversiunea participiului activ (gerunziu adjectivizat) al verbului <em>a arde</em>." },
+
+  { cat: "Gerunziu → Alte clase", dif: 3,
+    q: "Identificați cuvântul provenit dintr-un gerunziu convertit în adjectiv:",
+    opts: ["citind", "citit", "cititoare", "citire"],
+    ans: 2,
+    exp: "<strong>Cititoare</strong> (ex: <em>o lampă cititoare</em>) provine din gerunziul adjectivizat. <em>Citind</em> rămâne gerunziu verbal." },
+
+  // ══════════════════════════════════════════
+  // INTERJECȚIE → ALTE CLASE — NIVEL 3
+  // ══════════════════════════════════════════
+  { cat: "Interjecție → Alte clase", dif: 3,
+    q: "În <em>un vai de inimă</em>, <strong>vai</strong> este:",
+    opts: ["Interjecție", "Substantiv prin conversiune din interjecție", "Adverb", "Adjectiv"],
+    ans: 1,
+    exp: "<strong>Vai</strong> în <em>un vai de inimă</em> funcționează ca <em>substantiv</em> (are articol nehotărât) — conversiune din interjecție." },
+
+  { cat: "Interjecție → Alte clase", dif: 3,
+    q: "Cuvântul <strong>halal</strong> în <em>halal de el!</em> este interjecție. În <em>o treabă halal</em> este:",
+    opts: ["Interjecție", "Adverb", "Adjectiv prin conversiune", "Substantiv"],
+    ans: 2,
+    exp: "În <em>o treabă halal</em>, <strong>halal</strong> funcționează ca <em>adjectiv</em> (atribut) — interjecția s-a convertit în adjectiv cu sensul de <em>cum trebuie</em>." },
+
+  // ══════════════════════════════════════════
+  // CONTEXTE AMBIGUE — NIVEL 3
+  // ══════════════════════════════════════════
+  { cat: "Contexte ambigue", dif: 3,
+    q: "Cum determini clasa morfologică a unui cuvânt convertit?",
+    opts: ["După forma sa", "După sensul din dicționar", "După funcția sintactică și contextul în care apare", "După numărul de litere"],
+    ans: 2,
+    exp: "Un cuvânt convertit se identifică <strong>după context și funcție sintactică</strong>: același cuvânt poate fi substantiv, adjectiv sau adverb în propoziții diferite." },
+
+  { cat: "Contexte ambigue", dif: 3,
+    q: "Cuvântul <strong>bine</strong> este adverb în <em>scrie bine</em>, substantiv în <em>binele comun</em>. Ce este în <em>un om bine</em>?",
+    opts: ["Adverb", "Adjectiv (prin conversiune)", "Substantiv", "Interjecție"],
+    ans: 1,
+    exp: "În <em>un om bine</em>, <strong>bine</strong> funcționează ca <em>adjectiv</em> cu sensul de <em>îngrijit, prezentabil</em> — conversiune contextuală a adverbului." },
+
+  { cat: "Contexte ambigue", dif: 3,
+    q: "În <em>Trecutul nu se uită</em>, <strong>trecutul</strong> este:",
+    opts: ["Verb la participiu", "Adjectiv", "Substantiv prin conversiune din adjectiv / participiu", "Adverb"],
+    ans: 2,
+    exp: "<strong>Trecutul</strong> = participiul / adjectivul <em>trecut</em> + articol hotărât → <em>substantiv</em> cu sensul de <em>perioadă trecută</em>." },
+
+  { cat: "Contexte ambigue", dif: 3,
+    q: "Cuvântul <strong>contra</strong> poate fi adverb, prepoziție sau substantiv. În <em>un contra puternic</em> este:",
+    opts: ["Adverb", "Prepoziție", "Substantiv prin conversiune", "Adjectiv"],
+    ans: 2,
+    exp: "În <em>un contra puternic</em>, <strong>contra</strong> are articol nehotărât și funcționează ca <em>substantiv</em> — conversiune din adverb/prepoziție." },
+
+  { cat: "Contexte ambigue", dif: 3,
+    q: "Identificați propoziția în care <strong>repede</strong> este adjectiv (prin conversiune):",
+    opts: ["Aleargă repede", "Un elev repede la minte", "Mai repede!", "Repede, vino!"],
+    ans: 1,
+    exp: "În <em>un elev <strong>repede</strong> la minte</em>, <em>repede</em> determină un substantiv și funcționează ca <em>adjectiv</em>. În celelalte contexte este adverb sau interjecție." },
+
+  // ══════════════════════════════════════════
+  // CAZURI SPECIALE — NIVEL 3
+  // ══════════════════════════════════════════
+  { cat: "Cazuri speciale", dif: 3,
+    q: "Cuvântul <strong>ura</strong> în <em>strigăte de ura</em> este:",
+    opts: ["Verb la indicativ imperfect", "Substantiv prin conversiune din interjecție", "Adjectiv", "Adverb"],
+    ans: 1,
+    exp: "<strong>Ura</strong> ca strigăt de entuziasm este inițial interjecție. În <em>strigăte de ura</em> funcționează ca <em>substantiv</em> (poate fi articulat: <em>uraua</em>)." },
+
+  { cat: "Cazuri speciale", dif: 3,
+    q: "În <em>un da hotărât</em>, <strong>da</strong> este:",
+    opts: ["Adverb", "Substantiv prin conversiune din adverb / interjecție", "Verb", "Adjectiv"],
+    ans: 1,
+    exp: "<strong>Da</strong> în <em>un da hotărât</em> este <em>substantiv</em> (are articol nehotărât) — conversiune din adverb afirmativ. Similar: <em>un nu categoric</em>." },
+
+  { cat: "Cazuri speciale", dif: 3,
+    q: "Propoziția <em>Frumosul și urâtul coexistă</em> conține:",
+    opts: ["Două adjective cu funcție de subiect", "Două substantive provenite din adjective prin conversiune", "Două adverbe", "Un adjectiv și un substantiv"],
+    ans: 1,
+    exp: "<strong>Frumosul</strong> și <strong>urâtul</strong> sunt adjective (<em>frumos, urât</em>) convertite în <em>substantive</em> prin articulare și folosire ca subiecte." },
+
+  { cat: "Cazuri speciale", dif: 3,
+    q: "Cuvântul <strong>verde</strong> în <em>verdele ierbii</em> este:",
+    opts: ["Adjectiv", "Adverb", "Substantiv prin conversiune din adjectiv", "Verb"],
+    ans: 2,
+    exp: "<strong>Verdele ierbii</strong> — <em>verdele</em> are articol hotărât și funcționează ca <em>substantiv</em> (= culoarea verde a ierbii). Conversiune din adjectiv." },
+
+  { cat: "Cazuri speciale", dif: 3,
+    q: "Care serie conține <strong>exclusiv</strong> cuvinte obținute prin conversiune?",
+    opts: ["frumosul, tristul, binele, trecutul", "frumusețe, tristețe, bunătate, trecere", "a înfrumuseța, a întrista, a îmbunătăți", "frumos, trist, bun, trecut (ca adjective)"],
+    ans: 0,
+    exp: "<strong>Frumosul, tristul, binele, trecutul</strong> sunt adjective/participii convertite în substantive (au articol hotărât, funcție de substantiv). Celelalte serii implică derivare sau sunt forme primare." },
+
+  { cat: "Cazuri speciale", dif: 3,
+    q: "Prin conversiune, un adjectiv devine substantiv. Care este semnul cel mai clar al acestei schimbări?",
+    opts: ["Schimbarea sensului complet", "Primirea articolului hotărât sau nehotărât și funcția de substantiv", "Adăugarea unui sufix", "Schimbarea accentului"],
+    ans: 1,
+    exp: "Adjectivul convertit în substantiv primește <strong>articol (hotărât sau nehotărât)</strong> și ocupă poziții sintactice specifice substantivului (subiect, complement direct etc.)." },
+
+  { cat: "Cazuri speciale", dif: 3,
+    q: "Care enunț despre conversiune este <strong>fals</strong>?",
+    opts: [
+      "Conversiunea nu modifică forma cuvântului",
+      "Același cuvânt poate aparține mai multor clase în funcție de context",
+      "Conversiunea adaugă întotdeauna un sufix nou cuvântului",
+      "Participiul poate deveni adjectiv prin conversiune"
+    ],
+    ans: 2,
+    exp: "Enunțul <strong>fals</strong>: conversiunea <em>nu adaugă niciun sufix</em> — tocmai aceasta o diferențiază de derivare. Forma rămâne identică." },
+
+  { cat: "Cazuri speciale", dif: 3,
+    q: "Cuvântul <strong>mâine</strong> în <em>un mâine incert</em> este:",
+    opts: ["Adverb de timp", "Substantiv prin conversiune din adverb", "Adjectiv", "Interjecție"],
+    ans: 1,
+    exp: "<strong>Mâine</strong> în <em>un mâine incert</em> este <em>substantiv</em> (are articol nehotărât, funcție de subiect implicit) — conversiune din adverb de timp." },
+
+  { cat: "Cazuri speciale", dif: 3,
+    q: "Cum se numește în gramatică fenomenul prin care același cuvânt aparține mai multor clase morfologice în funcție de context?",
+    opts: ["Omonimie morfologică sau conversiune", "Sinonimie", "Paronimie", "Pleonasmul"],
+    ans: 0,
+    exp: "<strong>Omonimia morfologică</strong> (sau conversiunea) descrie situația în care același cuvânt poate fi, în contexte diferite, adjectiv, substantiv, adverb etc." }
+];
+
+const cats = [...new Set(QUESTIONS.map(q => q.cat))];
+let active = new Set(cats);
+let pool = [], cur = 0, score = 0, catScore = {};
+let answered = false;
+
+function buildPool() {
+  pool = QUESTIONS.filter(q => active.has(q.cat)).sort((a, b) => a.dif - b.dif);
+  cur = 0; score = 0; answered = false;
+  catScore = {};
+  cats.forEach(c => catScore[c] = { right: 0, total: 0 });
+  render();
+}
+
+function renderCats() {
+  const el = document.getElementById('catWrap');
+  el.innerHTML = cats.map((c, i) =>
+    `<button class="cat-btn ${active.has(c) ? 'active' : ''}" data-ci="${i}">${c}</button>`
+  ).join('');
+  el.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const c = cats[+btn.dataset.ci];
+      if (active.has(c)) { if (active.size > 1) active.delete(c); }
+      else active.add(c);
+      renderCats(); buildPool();
+    });
+  });
+}
+
+const DIV_LABELS = { 1: 'Ușor', 2: 'Mediu', 3: 'Dificil' };
+
+function render() {
+  const area = document.getElementById('quizArea');
+  const fill = document.getElementById('progFill');
+  const txt = document.getElementById('progText');
+  if (!pool.length) {
+    area.innerHTML = '<p style="text-align:center;color:#7A6F65;padding:2rem">Selectează cel puțin o categorie.</p>';
+    fill.style.width = '0%'; txt.textContent = '0 / 0'; return;
+  }
+  if (cur >= pool.length) { showResults(); return; }
+  const pct = Math.round((cur / pool.length) * 100);
+  fill.style.width = pct + '%';
+  txt.textContent = `${cur} / ${pool.length}`;
+  const q = pool[cur];
+  const letters = ['A', 'B', 'C', 'D'];
+  const dots = [1,2,3].map(d => `<span class="dot ${d <= q.dif ? 'on' : ''}"></span>`).join('');
+  area.innerHTML = `
+    <div class="q-card">
+      <div class="q-top"><span class="q-difficulty">${dots}</span></div>
+      <div class="dif-badge dif-${q.dif}">${DIV_LABELS[q.dif]}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options" id="opts">
+        ${q.opts.map((o,i) => `<button class="opt-btn" data-i="${i}"><span class="opt-letter">${letters[i]}</span>${o}</button>`).join('')}
+      </div>
+      <div class="explanation" id="exp">💡 ${q.exp}</div>
+    </div>
+    <div class="nav-row">
+      <span class="score-pill">Scor: <strong>${score}</strong> din ${cur}</span>
+      <button class="next-btn" id="nxt">${cur+1 < pool.length ? 'Următoarea →' : 'Vezi rezultatele →'}</button>
+    </div>`;
+  document.querySelectorAll('.opt-btn').forEach(b => b.addEventListener('click', () => choose(+b.dataset.i)));
+  document.getElementById('nxt').addEventListener('click', () => { cur++; render(); });
+  answered = false;
+}
+
+function choose(idx) {
+  if (answered) return;
+  answered = true;
+  const q = pool[cur];
+  document.querySelectorAll('.opt-btn').forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.ans) b.classList.add(idx === q.ans ? 'correct' : 'missed');
+    else if (i === idx) b.classList.add('wrong');
+  });
+  catScore[q.cat].total++;
+  if (idx === q.ans) { score++; catScore[q.cat].right++; }
+  document.getElementById('exp').classList.add('show');
+  document.getElementById('nxt').classList.add('show');
+  document.querySelector('.score-pill').innerHTML = `Scor: <strong>${score}</strong> din ${cur+1}`;
+}
+
+function showResults() {
+  document.getElementById('progFill').style.width = '100%';
+  document.getElementById('progText').textContent = `${pool.length} / ${pool.length}`;
+  const pct = Math.round((score / pool.length) * 100);
+  const msg = pct >= 85 ? 'Felicitări! Stăpânești perfect conversiunea.' :
+              pct >= 70 ? 'Foarte bine! Cunoști bine morfologia limbii române.' :
+              pct >= 50 ? 'Bine! Mai exersează categoriile dificile.' :
+                          'Continuă să studiezi! Cu practică vei reuși.';
+  const catRows = Object.entries(catScore).filter(([,v]) => v.total > 0)
+    .map(([c,v]) => `<div class="cat-row"><span class="cat-name">${c}</span><span class="cat-score">${v.right}/${v.total}</span></div>`).join('');
+  document.getElementById('quizArea').innerHTML = `
+    <div class="results">
+      <div class="results-score">${score}/${pool.length}</div>
+      <div class="results-total">răspunsuri corecte</div>
+      <div class="results-pct">${pct}% din total</div>
+      <div class="results-msg">${msg}</div>
+      <div class="cat-results">${catRows}</div>
+      <button class="restart-btn" id="rb">Încearcă din nou</button>
+    </div>`;
+  document.getElementById('rb').addEventListener('click', () => { buildPool(); renderCats(); });
+}
+
+renderCats();
+buildPool();
+</script>
+</body>
+</html>
