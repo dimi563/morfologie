@@ -176,8 +176,8 @@ const QUESTIONS = [
   { cat: "Verb → Substantiv", dif: 2,
     q: "În <em>Cititul mult te îmbogățește</em>, <strong>cititul</strong> provine din:",
     opts: ["Supin articulat", "Infinitiv lung articulat", "Participiu articulat", "Gerunziu articulat"],
-    ans: 1,
-    exp: "<strong>Cititul</strong> = infinitivul lung <em>citire</em>... Nu, de fapt: <em>citit</em> (supin) + articol <em>-ul</em> → <strong>supinul articulat</strong> folosit ca substantiv." },
+    ans: 0,
+    exp: "<strong>Cititul</strong> = supinul verbului <em>a citi</em> (<em>citit</em>) + articolul hotărât <em>-ul</em> → supin articulat folosit ca substantiv (subiect)." },
 
   { cat: "Verb → Substantiv", dif: 2,
     q: "Care formă verbală poate deveni cel mai ușor substantiv prin conversiune în română?",
@@ -290,29 +290,29 @@ const QUESTIONS = [
   { cat: "Substantiv → Alte clase", dif: 3,
     q: "În <em>Doamne, ajută!</em>, <strong>Doamne</strong> este:",
     opts: ["Substantiv în cazul vocativ", "Substantiv convertit în interjecție", "Adjectiv", "Verb"],
-    ans: 1,
-    exp: "<strong>Doamne</strong> în exclamații funcționează ca <em>interjecție</em> — provine din substantivul <em>Domn</em> la vocativ, convertit prin uz." },
+    ans: 0,
+    exp: "<strong>Doamne</strong> este <em>substantivul Domn</em> la cazul <strong>vocativ</strong> — nu este conversiune, ci flexiune cazuală. Rămâne substantiv." },
 
   // ══════════════════════════════════════════
   // GERUNZIU → ALTE CLASE — NIVEL 3
   // ══════════════════════════════════════════
   { cat: "Gerunziu → Alte clase", dif: 3,
-    q: "În <em>apă curgătoare</em>, <strong>curgătoare</strong> este:",
-    opts: ["Verb la gerunziu", "Adjectiv provenit din gerunziu prin conversiune", "Substantiv", "Adverb"],
+    q: "Gerunziul poate funcționa uneori ca adverb. În <em>a intrat <strong>alergând</strong></em>, <strong>alergând</strong> este:",
+    opts: ["Verb la gerunziu cu funcție de complement circumstanțial de mod", "Adjectiv", "Substantiv", "Adverb propriu-zis"],
+    ans: 0,
+    exp: "<strong>Alergând</strong> este gerunziu verbal cu valoare de <em>complement circumstanțial de mod</em> — răspunde la întrebarea <em>cum?</em>. Nu este conversiune propriu-zisă, ci valoare adverbială contextuală." },
+
+  { cat: "Gerunziu → Alte clase", dif: 3,
+    q: "În <em>o situație <strong>îngrijorătoare</strong></em>, cuvântul <strong>îngrijorătoare</strong> este adjectiv. Provine din:",
+    opts: ["Conversiunea gerunziului îngrijorând", "Derivare cu sufix -toare de la verbul a îngrijora", "Compunere", "Conversiunea unui substantiv"],
     ans: 1,
-    exp: "<strong>Curgătoare</strong> provine din gerunziul <em>curgând</em>, dar funcționează ca <em>adjectiv</em> (determină substantivul <em>apă</em>)." },
+    exp: "<strong>Îngrijorătoare</strong> este format prin <em>derivare cu sufixul -toare</em>, nu prin conversiune. Este o greșeală frecventă să se confunde derivatele în -tor/-toare cu conversiunea gerunziului." },
 
   { cat: "Gerunziu → Alte clase", dif: 3,
-    q: "Cuvântul <strong>arzător</strong> în <em>o problemă arzătoare</em> provine din:",
-    opts: ["Substantiv", "Gerunziu / participiu activ convertit în adjectiv", "Derivare cu sufix -ător", "Compunere"],
-    ans: 2,
-    exp: "<strong>Arzătoare</strong> este adjectiv format prin conversiunea participiului activ (gerunziu adjectivizat) al verbului <em>a arde</em>." },
-
-  { cat: "Gerunziu → Alte clase", dif: 3,
-    q: "Identificați cuvântul provenit dintr-un gerunziu convertit în adjectiv:",
-    opts: ["citind", "citit", "cititoare", "citire"],
-    ans: 2,
-    exp: "<strong>Cititoare</strong> (ex: <em>o lampă cititoare</em>) provine din gerunziul adjectivizat. <em>Citind</em> rămâne gerunziu verbal." },
+    q: "Care este deosebirea dintre <strong>gerunziul verbal</strong> și <strong>adjectivul verbal</strong> (participiu prezent)?",
+    opts: ["Nu există deosebire", "Gerunziul verbal exprimă o acțiune în desfășurare; adjectivul verbal determină un substantiv și se acordă cu el", "Gerunziul se scrie cu cratimă", "Adjectivul verbal nu există în română"],
+    ans: 1,
+    exp: "<strong>Gerunziu verbal</strong>: <em>Citind, a aflat vestea</em> (acțiune). <strong>Adjectiv verbal</strong>: <em>o carte captivantă</em> — se acordă în gen și număr cu substantivul determinat." },
 
   // ══════════════════════════════════════════
   // INTERJECȚIE → ALTE CLASE — NIVEL 3
