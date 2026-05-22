@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
@@ -93,7 +92,7 @@
 <div class="page-header">
   <div class="label">Limba Română &middot; Morfologie</div>
   <h1>Compunerea <span>Cuvintelor</span></h1>
-  <p>50 de întrebări &mdash; alăturare, abreviere, subordonare</p>
+  <p>Întrebări de fixare &mdash; alăturare, abreviere, subordonare</p>
 </div>
 <div class="container">
   <div class="cat-wrap" id="catWrap"></div>
@@ -106,7 +105,6 @@
 
 <script>
 const QUESTIONS = [
-
   // ═══════════════════════════════════════════════
   // ALĂTURARE — NIVEL 1
   // ═══════════════════════════════════════════════
@@ -132,7 +130,7 @@ const QUESTIONS = [
     q: "Cuvântul <strong>untdelemn</strong> este un compus format din:",
     opts: ["unt + de + lemn", "un + t + de + lemn", "und + elemn", "Nu este cuvânt compus"],
     ans: 0,
-    exp: "<strong>Untdelemn</strong> = unt + de + lemn (ulei de măsline). Compus prin alăturare sudată din trei elemente." },
+    exp: "<strong>Untdelemn</strong> = unt + de + lemn. Compus prin alăturare sudată din trei elemente." },
 
   { cat: "Alăturare", dif: 1,
     q: "Care cuvânt compus este scris <strong>cu cratimă</strong>?",
@@ -147,19 +145,19 @@ const QUESTIONS = [
     q: "Ce tip de compunere este <strong>portbagaj</strong>?",
     opts: ["Alăturare", "Subordonare", "Abreviere", "Derivare cu prefix"],
     ans: 1,
-    exp: "<strong>Portbagaj</strong> = port- (poartă) + bagaj. Este compunere prin <strong>subordonare</strong>: primul element este subordonat semantic celui de-al doilea." },
+    exp: "<strong>Portbagaj</strong> = port- (poartă) + bagaj. Este compunere prin <strong>subordonare</strong>: primul element determină semantic pe al doilea." },
 
   { cat: "Subordonare", dif: 1,
     q: "Cuvântul <strong>telecomandă</strong> este format prin subordonare folosind elementul de compunere:",
     opts: ["tele-", "co-", "man-", "andă"],
     ans: 0,
-    exp: "Elementul de compunere <strong>tele-</strong> (din greacă, = departe) + comandă → telecomandă (comandă de la distanță)." },
+    exp: "Elementul de compunere savant <strong>tele-</strong> (din greacă, = departe) + comandă → telecomandă (comandă de la distanță)." },
 
   { cat: "Subordonare", dif: 1,
     q: "Care este elementul de compunere din <strong>fotografie</strong>?",
     opts: ["foto- (lumină)", "foto- (apă)", "grafi- (scriere)", "Ambele foto- și -grafie"],
     ans: 3,
-    exp: "<strong>Foto-</strong> (gr. <em>phos</em> = lumină) + <strong>-grafie</strong> (gr. <em>graphein</em> = a scrie/înregistra) → fotografie = înregistrare cu lumină." },
+    exp: "<strong>Foto-</strong> (gr. <em>phos</em> = lumină) + <strong>-grafie</strong> (gr. <em>graphein</em> = a scrie) → fotografie = înregistrare cu ajutorul luminii." },
 
   { cat: "Subordonare", dif: 1,
     q: "Cuvântul <strong>geografie</strong> conține elementele de compunere:",
@@ -171,7 +169,7 @@ const QUESTIONS = [
     q: "Care dintre cuvinte NU este format prin subordonare cu element de compunere savant?",
     opts: ["biologie", "termometru", "floarea-soarelui", "telescop"],
     ans: 2,
-    exp: "<strong>Floarea-soarelui</strong> este compus prin <em>alăturare cu cratimă</em>, nu prin subordonare cu elemente savante." },
+    exp: "<strong>Floarea-soarelui</strong> este compus prin <em>alăturare cu cratimă</em> din cuvinte independente, nu prin subordonare cu elemente savante." },
 
   // ═══════════════════════════════════════════════
   // ABREVIERE — NIVEL 1
@@ -180,31 +178,31 @@ const QUESTIONS = [
     q: "Ce este <strong>ONU</strong>?",
     opts: ["Un cuvânt derivat", "O abreviere prin inițiale", "Un cuvânt compus prin alăturare", "Un element de compunere"],
     ans: 1,
-    exp: "<strong>ONU</strong> = Organizația Națiunilor Unite. Este o <strong>abreviere prin inițiale</strong> (acronim)." },
+    exp: "<strong>ONU</strong> = Organizația Națiunilor Unite. Este o <strong>abreviere prin inițiale</strong>." },
 
   { cat: "Abreviere", dif: 1,
     q: "Abrevierea <strong>TV</strong> provine din:",
     opts: ["Televizor Vechi", "TeleViziune", "Timp Vizual", "Transmisie Video"],
     ans: 1,
-    exp: "<strong>TV</strong> = <strong>T</strong>ele<strong>V</strong>iziune. Abreviere prin inițiale folosită internațional." },
+    exp: "<strong>TV</strong> = <strong>T</strong>ele<strong>V</strong>iziune. Abreviere prin inițiale folosită curent." },
 
   { cat: "Abreviere", dif: 1,
-    q: "Care dintre următoarele este un <strong>acronim</strong> (abreviere care se citește ca un cuvânt)?",
+    q: "Care dintre următoarele este un <strong>acronim</strong> (abreviere care se citește direct ca un cuvânt)?",
     opts: ["CFR", "UNESCO", "SUA", "km/h"],
     ans: 1,
-    exp: "<strong>UNESCO</strong> se citește ca un cuvânt întreg (u-nes-co), deci este un <strong>acronim</strong>. CFR și SUA se citesc literă cu literă." },
+    exp: "<strong>UNESCO</strong> se citește ca un cuvânt legat (u-nes-co), fiind un <strong>acronim</strong>. CFR și SUA se citesc separat, literă cu literă." },
 
   { cat: "Abreviere", dif: 1,
     q: "Cuvântul <strong>radar</strong> provine dintr-o abreviere englezească. Ce înseamnă?",
     opts: ["Radio Detection And Ranging", "Rapid Aerial Detection And Relay", "Remote Area Data And Radio", "Radio Automatic Direction And Range"],
     ans: 0,
-    exp: "<strong>RADAR</strong> = <em>Radio Detection And Ranging</em>. A intrat în română ca substantiv comun prin lexicalizarea abrevierii." },
+    exp: "<strong>RADAR</strong> = <em>Radio Detection And Ranging</em>. A intrat în limba română ca substantiv comun prin asimilarea completă a abrevierii." },
 
   { cat: "Abreviere", dif: 1,
     q: "Prescurtarea <strong>prof.</strong> este:",
     opts: ["Un acronim", "O abreviere grafică (nu se pronunță prescurtat)", "Un cuvânt compus", "Un element de compunere"],
     ans: 1,
-    exp: "<strong>Prof.</strong> este o <strong>abreviere grafică</strong> — se scrie prescurtat, dar se pronunță întotdeauna <em>profesor</em>." },
+    exp: "<strong>Prof.</strong> este o <strong>abreviere grafică</strong> — în text o scriem redusă pentru economie de spațiu, dar o citim întotdeauna integral: <em>profesor</em>." },
 
   // ═══════════════════════════════════════════════
   // ALĂTURARE — NIVEL 2
@@ -213,76 +211,76 @@ const QUESTIONS = [
     q: "Care este diferența dintre <strong>alăturarea sudată</strong> și <strong>alăturarea cu cratimă</strong>?",
     opts: ["Nu există diferență", "Sudată: scris împreună; cu cratimă: unit prin -", "Sudată: folosește prefix; cu cratimă: folosește sufix", "Sudată: două cuvinte separate; cu cratimă: un singur cuvânt"],
     ans: 1,
-    exp: "<strong>Sudată</strong>: cuvintele se contopesc complet (binefăcător). <strong>Cu cratimă</strong>: cuvintele rămân distincte dar legate (floarea-soarelui)." },
+    exp: "<strong>Sudată</strong>: cuvintele se contopesc complet din punct de vedere grafic (binefăcător). <strong>Cu cratimă</strong>: termenii rămân distincți, dar legați (floarea-soarelui)." },
 
   { cat: "Alăturare", dif: 2,
     q: "Cuvântul compus <strong>gură-cască</strong> denumește:",
-    opts: ["Un tip de pește", "O persoană care se uită fără să facă nimic", "Un instrument muzical", "Un tip de căpăcele"],
+    opts: ["Un tip de pește", "O persoană distrată sau gata să caște gura la orice", "Un instrument muzical", "Un tip de căpăcele"],
     ans: 1,
-    exp: "<strong>Gură-cască</strong> = persoană care stă cu gura căscată (curioasă, naivă). Compus prin alăturare cu sens figurat." },
+    exp: "<strong>Gură-cască</strong> = compus din substantiv + verb prin alăturare cu cratimă, folosit cu sens figurat pentru a descrie o persoană naivă sau gură-cască." },
 
   { cat: "Alăturare", dif: 2,
     q: "Identificați cuvântul compus prin <strong>alăturare sudată</strong>:",
     opts: ["cal-de-mare", "prim-ministru", "bunăvoință", "câine-lup"],
     ans: 2,
-    exp: "<strong>Bunăvoință</strong> = bună + voință, scris complet sudat (fără cratimă sau spațiu)." },
+    exp: "<strong>Bunăvoință</strong> = bună + voință, scris complet contopit (fără cratimă sau spațiu)." },
 
   { cat: "Alăturare", dif: 2,
-    q: "Cum se scrie corect compusul format din <em>bine</em> + <em>venit</em>?",
+    q: "Cum se scrie corect adjectivul compus format din <em>bine</em> + <em>venit</em>?",
     opts: ["bine venit", "bine-venit", "binevenit", "Toate variantele sunt corecte"],
     ans: 2,
-    exp: "<strong>Binevenit</strong> — adjectiv compus prin alăturare sudată. Dar <em>Bine ai venit!</em> (ca formulă) se scrie separat." },
+    exp: "Adjectivul este <strong>binevenit</strong> (compus prin alăturare sudată). Structura se scrie separat doar în contexte de tipul: <em>Bine ai venit!</em>" },
 
   { cat: "Alăturare", dif: 2,
-    q: "Care dintre compuse este format prin <strong>alăturare cu prepoziție</strong>?",
-    opts: ["binefăcător", "floarea-soarelui", "bunăstare", "câine"],
+    q: "Care dintre compuse este format prin <strong>alăturare cu ajutorul unei prepoziții</strong>?",
+    opts: ["binefăcător", "untdelemn", "bunăstare", "câine"],
     ans: 1,
-    exp: "<strong>Floarea-soarelui</strong> = floarea + <em>soarelui</em> (genitiv), dar structural include relația de la soare. Alte exemple cu prep.: <em>untdelemn</em> (unt + de + lemn)." },
+    exp: "<strong>Untdelemn</strong> = unt + <em>de</em> (prepoziție) + lemn. Structura s-a sudat complet în timp." },
 
   // ═══════════════════════════════════════════════
   // SUBORDONARE — NIVEL 2
   // ═══════════════════════════════════════════════
   { cat: "Subordonare", dif: 2,
-    q: "Elementul de compunere <strong>bio-</strong> înseamnă:",
+    q: "Elementul de compunere savant <strong>bio-</strong> înseamnă:",
     opts: ["două", "viață", "carte", "lumină"],
     ans: 1,
-    exp: "<strong>Bio-</strong> (gr. <em>bios</em>) = viață: biologie, biograf, biodiversitate." },
+    exp: "<strong>Bio-</strong> provine din grecescul <em>bios</em> (viață) și apare în compuse precum: biologie, biograf, biodiversitate." },
 
   { cat: "Subordonare", dif: 2,
-    q: "Care pereche de elemente de compunere sunt <strong>antonime</strong>?",
+    q: "Care pereche de elemente savante de compunere are sens <strong>antonim</strong>?",
     opts: ["macro- și mega-", "micro- și macro-", "tele- și foto-", "bio- și geo-"],
     ans: 1,
-    exp: "<strong>Micro-</strong> (mic) și <strong>macro-</strong> (mare) sunt antonime: microscop vs. macroeconomie." },
+    exp: "<strong>Micro-</strong> (mic) și <strong>macro-</strong> (mare) reprezintă antonime perfecte în compunerea savantă: microscop vs. macroeconomie." },
 
   { cat: "Subordonare", dif: 2,
-    q: "Cuvântul <strong>antropologie</strong> conține elementele:",
+    q: "Cuvântul <strong>antropologie</strong> conține elementele savante:",
     opts: ["antro- (aer) + -logie", "antropo- (om) + -logie (știință)", "ant- + ro- + logie", "antropo- (animal) + -logie"],
     ans: 1,
-    exp: "<strong>Antropo-</strong> (gr. <em>anthropos</em> = om) + <strong>-logie</strong> (gr. <em>logos</em> = știință) → antropologie = știința despre om." },
+    exp: "<strong>Antropo-</strong> (gr. <em>anthropos</em> = om) + <strong>-logie</strong> (gr. <em>logos</em> = știință) → antropologie = știința care studiază omul." },
 
   { cat: "Subordonare", dif: 2,
-    q: "Elementul <strong>-fon / fono-</strong> în <em>microfon</em>, <em>fonologie</em> înseamnă:",
+    q: "Elementul savant <strong>-fon / fono-</strong> din cuvinte ca <em>microfon</em> sau <em>fonologie</em> înseamnă:",
     opts: ["lumină", "sunet / voce", "scriere", "mișcare"],
     ans: 1,
-    exp: "<strong>Fono-</strong> (gr. <em>phone</em>) = sunet, voce: microfon, fonologie, saxofon." },
+    exp: "<strong>Fono- / -fon</strong> (gr. <em>phone</em>) se referă exclusiv la sunet sau voce: microfon, fonogramă, saxofon." },
 
   { cat: "Subordonare", dif: 2,
-    q: "Care cuvânt conține elementul de compunere <strong>-teca</strong> (colecție, depozit)?",
-    opts: ["biblioteca", "tehnică", "fantastică", "practică"],
+    q: "Care cuvânt conține sufixoidul (elementul secund) <strong>-tecă</strong>, însemnând colecție sau depozit?",
+    opts: ["bibliotecă", "tehnică", "fantastică", "practică"],
     ans: 0,
-    exp: "<strong>Biblio-teca</strong> = biblio- (carte) + -teca (depozit) → bibliotecă = depozit de cărți. Și: discotecă, filmotecă." },
+    exp: "<strong>Biblio-tecă</strong> = biblio- (carte) + -tecă (depozit) → depozit sau colecție de cărți. La fel și în: discotecă, filmotecă." },
 
   { cat: "Subordonare", dif: 2,
-    q: "Ce înseamnă elementul de compunere <strong>termo-</strong> din termometru, termostat?",
+    q: "Ce înseamnă elementul de compunere <strong>termo-</strong> întâlnit în termometru sau termostat?",
     opts: ["apă", "căldură", "viteză", "timp"],
     ans: 1,
-    exp: "<strong>Termo-</strong> (gr. <em>thermos</em>) = căldură: termometru (măsoară căldura), termostat, termocentrală." },
+    exp: "<strong>Termo-</strong> (gr. <em>thermos</em>) înseamnă căldură sau temperatură: termometru (aparat de măsurat căldura)." },
 
   { cat: "Subordonare", dif: 2,
-    q: "Cuvântul <strong>cardiovascular</strong> conține elementul <em>cardio-</em> cu sensul:",
+    q: "Cuvântul <strong>cardiovascular</strong> conține elementul savant <em>cardio-</em> cu înțelesul de:",
     opts: ["creier", "inimă", "sânge", "plămân"],
     ans: 1,
-    exp: "<strong>Cardio-</strong> (gr. <em>kardia</em>) = inimă: cardiovascular, cardiologie, cardiogram." },
+    exp: "<strong>Cardio-</strong> (gr. <em>kardia</em>) se referă la inimă: cardiovascular, cardiologie, cardiogramă." },
 
   // ═══════════════════════════════════════════════
   // ABREVIERE — NIVEL 2
@@ -291,180 +289,185 @@ const QUESTIONS = [
     q: "Ce tip de abreviere este <strong>TAROM</strong>?",
     opts: ["Abreviere grafică", "Acronim lexicalizat", "Abreviere prin inițiale citită literal", "Simbol"],
     ans: 1,
-    exp: "<strong>TAROM</strong> = Transporturile Aeriene ROMâne. Este un <strong>acronim lexicalizat</strong> — se pronunță ca un cuvânt și este simțit ca atare." },
+    exp: "<strong>TAROM</strong> (Transporturile Aeriene ROMâne) este un <strong>acronim lexicalizat</strong>, deoarece se pronunță fluid ca un cuvânt și se comportă ca un substantiv comun." },
 
   { cat: "Abreviere", dif: 2,
-    q: "Care abreviere este un <strong>simbol internațional</strong> (nu se citește în română)?",
+    q: "Care abreviere reprezintă un <strong>simbol internațional</strong> (și nu se scrie cu punct la final)?",
     opts: ["prof.", "ONG", "km", "pct."],
     ans: 2,
-    exp: "<strong>km</strong> (kilometru) este un <strong>simbol metric internațional</strong> — nu se pronunță prescurtat, nu se pune punct după el." },
+    exp: "<strong>km</strong> (kilometru) este un <strong>simbol metric internațional</strong>. Regulile prevăd că simbolurile și acronimele nu primesc punct la final." },
 
   { cat: "Abreviere", dif: 2,
     q: "Abrevierea <strong>ONG</strong> înseamnă:",
     opts: ["Organizație Non-Guvernamentală", "Organizație Națională de Guvernare", "Oficiu Național de Gestionare", "Ordine Națională Generală"],
     ans: 0,
-    exp: "<strong>ONG</strong> = <strong>O</strong>rganizație <strong>N</strong>on-<strong>G</strong>uvernamentală. Se citește literă cu literă (O-N-G)." },
+    exp: "<strong>ONG</strong> = <strong>O</strong>rganizație <strong>N</strong>on-<strong>G</strong>uvernamentală. Fiind o abreviere prin inițiale clasică, se citește literă cu literă (O-N-G)." },
 
   { cat: "Abreviere", dif: 2,
-    q: "Cum se numește procedeul prin care o abreviere devine cuvânt de sine stătător (ex: <em>laser, radar</em>)?",
+    q: "Cum se numește procedeul prin care o abreviere devine cuvânt de sine stătător în vocabular (ex: <em>laser, radar</em>)?",
     opts: ["Derivare", "Lexicalizarea abrevierii", "Conversiune", "Compunere prin alăturare"],
     ans: 1,
-    exp: "<strong>Lexicalizarea</strong> = abrevierea devine cuvânt comun: <em>laser</em> (Light Amplification by Stimulated Emission of Radiation) se folosește ca substantiv obișnuit." },
+    exp: "Prin <strong>lexicalizare</strong>, abrevierea își pierde caracterul pur tehnic și intră direct în vocabular ca substantiv obișnuit (un laser, laserele)." },
 
   { cat: "Abreviere", dif: 2,
-    q: "Ce abreviere grafică se folosește pentru <em>etcetera</em>?",
+    q: "Ce abreviere grafică consacrată se folosește pentru expresia latină <em>et cetera</em>?",
     opts: ["e.g.", "i.e.", "etc.", "cf."],
     ans: 2,
-    exp: "<strong>Etc.</strong> = <em>et cetera</em> (lat. = și celelalte). Abreviere grafică; se pronunță întotdeauna <em>et cetera</em> sau <em>și altele</em>." },
+    exp: "<strong>Etc.</strong> provine de la <em>et cetera</em> (și celelalte / și altele). Este o abreviere grafică, textul citindu-se integral." },
 
   // ═══════════════════════════════════════════════
   // ALĂTURARE — NIVEL 3
   // ═══════════════════════════════════════════════
   { cat: "Alăturare", dif: 3,
-    q: "Care dintre compuse are <strong>structura Adjectiv + Substantiv</strong> (sudat)?",
+    q: "Care dintre compuse are structural la bază un <strong>Adjectiv + Substantiv</strong> (sudat)?",
     opts: ["floarea-soarelui", "bunăstare", "câine-lup", "gură-cască"],
     ans: 1,
-    exp: "<strong>Bunăstare</strong> = bună (adj.) + stare (sb.) — structură adj.+sb., scrisă sudat. Stare bună de viață." },
+    exp: "<strong>Bunăstare</strong> este format din adjectivul „bună” combinat cu substantivul „stare”, rezultând un cuvânt complet sudat." },
 
   { cat: "Alăturare", dif: 3,
-    q: "Cuvântul compus <strong>curcubeu</strong> provine din:",
+    q: "Cuvântul compus <strong>curcubeu</strong> provine etimologic din:",
     opts: ["curc + ubeu", "curcu- + beu (latină: bibo = a bea)", "corabie + u", "Nu este un compus"],
     ans: 1,
-    exp: "<strong>Curcubeu</strong> provine din lat. <em>curvus</em> (curb) + <em>bibere</em> (a bea) — arcul care pare că bea apa. Compus etimologic sudat." },
+    exp: "<strong>Curcubeu</strong> provine din elementele latinești <em>curvus</em> (curbat) + <em>bibere</em> (a bea) — arcul din cer care metaforic pare că bea apa din nori. Este un compus etimologic sudat." },
 
   { cat: "Alăturare", dif: 3,
-    q: "Identificați seria în care <strong>toate</strong> cuvintele sunt compuse prin alăturare:",
+    q: "Identificați seria în care <strong>toate</strong> cuvintele sunt formate exclusiv prin procedeul alăturării:",
     opts: ["binefăcător, floarea-soarelui, untdelemn", "telecomandă, biologie, termometru", "ONU, NATO, TAROM", "prefăcut, rescris, nedrept"],
     ans: 0,
-    exp: "Toate sunt prin alăturare: <strong>binefăcător</strong> (sudat), <strong>floarea-soarelui</strong> (cu cratimă), <strong>untdelemn</strong> (sudat cu prep.). Celelalte serii conțin elemente savante sau derivate." },
+    exp: "Seria prima conține doar compuse prin alăturare: <strong>binefăcător</strong> (sudată), <strong>floarea-soarelui</strong> (cu cratimă) și <strong>untdelemn</strong> (sudată cu prepoziție)." },
 
   { cat: "Alăturare", dif: 3,
     q: "Cuvântul <strong>prim-ministru</strong> se scrie cu cratimă deoarece:",
-    opts: ["Este un împrumut din franceză", "Este o alăturare în care ambele elemente au valoare egală sau apropiată", "Primul element este un prefix", "Este o abreviere"],
+    opts: ["Este un împrumut brut din franceză", "Este o alăturare necontopită în care ambele elemente își păstrează flexiunea", "Primul element are doar rol de prefix", "Este o abreviere strictă"],
     ans: 1,
-    exp: "Cratima marchează <strong>alăturarea</strong> fără contopire deplină; ambele elemente (prim + ministru) contribuie la sens și își păstrează forma." },
+    exp: "Cratima marchează o <strong>alăturare necontopită complet</strong>. La plural, ambele cuvinte își schimbă forma: <em>prim-miniștri</em> (în cazul substantivelor compuse similare, elementele flexibile se acordă)." },
 
   { cat: "Alăturare", dif: 3,
-    q: "Care este structura morfologică a compusului <strong>ochi-de-pisică</strong>?",
-    opts: ["Sb. + Adj.", "Sb. + Prep. + Sb.", "Vb. + Sb.", "Adj. + Sb."],
+    q: "Care este structura morfologică a cuvântului compus <strong>ochi-de-pisică</strong>?",
+    opts: ["Substantiv + Adjectiv", "Substantiv + Prepoziție + Substantiv", "Verb + Substantiv", "Adjectiv + Substantiv"],
     ans: 1,
-    exp: "<strong>Ochi</strong> (sb.) + <strong>de</strong> (prep.) + <strong>pisică</strong> (sb.) — structură Sb. + Prep. + Sb., compus prin alăturare cu prepoziție, scris cu cratimă." },
+    exp: "<strong>Ochi</strong> (substantiv) + <strong>de</strong> (prepoziție) + <strong>pisică</strong> (substantiv). Este o alăturare cu ajutorul unei prepoziții." },
 
   // ═══════════════════════════════════════════════
   // SUBORDONARE — NIVEL 3
   // ═══════════════════════════════════════════════
   { cat: "Subordonare", dif: 3,
-    q: "Care este diferența principală între compunerea prin <strong>subordonare</strong> și compunerea prin <strong>alăturare</strong>?",
-    opts: ["Nu există diferență", "Subordonarea folosește elemente savante (greco-latine); alăturarea folosește cuvinte românești existente", "Subordonarea folosește cratima; alăturarea nu", "Subordonarea formează verbe; alăturarea formează substantive"],
+    q: "Ce caracterizează compunerea prin <strong>subordonare savantă</strong>?",
+    opts: [
+      "Unirea a două cuvinte românești obișnuite prin cratimă",
+      "Utilizarea unor elemente de compunere (prefixoide/sufixoide) de origine greacă sau latină",
+      "Schimbarea valorii gramaticale a unui cuvânt fără modificări grafice",
+      "Abrevierea prin inițiale a unor organizații"
+    ],
     ans: 1,
-    exp: "<strong>Subordonarea</strong> combină elemente de compunere de origine greacă sau latină (bio-, geo-, -logie). <strong>Alăturarea</strong> combină cuvinte românești deja existente." },
+    exp: "<strong>Subordonarea savantă</strong> (sau compunerea cu afixoide) folosește elemente luate din limbile clasice (bio-, geo-, -logie, -crat), unde un element determină înțelesul celuilalt." },
 
   { cat: "Subordonare", dif: 3,
-    q: "Cuvântul <strong>psihologie</strong> conține elementele:",
+    q: "Cuvântul <strong>psihologie</strong> conține elementele savante:",
     opts: ["psih- (suflet) + -ologie (știință)", "psi- + ho- + logie", "psihic + ologie", "psiho- (minte) + -logie (cuvânt)"],
     ans: 0,
-    exp: "<strong>Psiho-</strong> (gr. <em>psyche</em> = suflet, minte) + <strong>-logie</strong> (gr. <em>logos</em> = știință) → psihologie = știința despre suflet/minte." },
+    exp: "<strong>Psiho-</strong> (gr. <em>psyche</em> = suflet, minte) + <strong>-logie</strong> (gr. <em>logos</em> = știință) → psihologie = știința care se ocupă cu studiul sufletului/minții." },
 
   { cat: "Subordonare", dif: 3,
-    q: "Elementul <strong>-crat / -crație</strong> din <em>democrație</em>, <em>birocrat</em> înseamnă:",
+    q: "Elementul savant <strong>-crat / -crație</strong> întâlnit în <em>democrație</em> sau <em>birocrat</em> înseamnă:",
     opts: ["popor", "putere, guvernare", "lege", "ordine"],
     ans: 1,
-    exp: "<strong>-crație / -crat</strong> (gr. <em>kratos</em>) = putere, guvernare: demo-crație (puterea poporului), aristo-crație (puterea nobililor)." },
+    exp: "Sufixoidul <strong>-crație / -crat</strong> provine din grecescul <em>kratos</em> (putere, forță, guvernare): democrație = puterea poporului." },
 
   { cat: "Subordonare", dif: 3,
-    q: "Identificați seria în care <strong>toate</strong> cuvintele sunt formate prin subordonare cu elemente savante:",
+    q: "Identificați seria în care <strong>toate</strong> cuvintele sunt formate prin subordonare savantă:",
     opts: ["floarea-soarelui, portbagaj, telecomandă", "biologie, geografie, astronomie", "bunăstare, binefăcător, curcubeu", "ONU, UNESCO, TAROM"],
     ans: 1,
-    exp: "<strong>Biologie</strong> (bio-+-logie), <strong>geografie</strong> (geo-+-grafie), <strong>astronomie</strong> (astro-+-nomie) — toate conțin exclusiv elemente de compunere savante." },
+    exp: "<strong>Biologie</strong> (bio- + -logie), <strong>geografie</strong> (geo- + -grafie), <strong>astronomie</strong> (astro- + -nomie) sunt formate exclusiv prin unirea elementelor savante." },
 
   { cat: "Subordonare", dif: 3,
-    q: "Cuvântul <strong>cronometru</strong> conține elementele (în ordine):",
+    q: "Cuvântul <strong>cronometru</strong> conține elementele constitutive (în ordine):",
     opts: ["crono- (timp) + -metru (măsură)", "cron- (culoare) + -ometru", "crono- (număr) + -metru", "crono- (viteză) + -metru (distanță)"],
     ans: 0,
-    exp: "<strong>Crono-</strong> (gr. <em>chronos</em> = timp) + <strong>-metru</strong> (gr. <em>metron</em> = măsură) → cronometru = instrument de măsurat timpul." },
+    exp: "<strong>Crono-</strong> (gr. <em>chronos</em> = timp) + <strong>-metru</strong> (gr. <em>metron</em> = măsură) → instrument pentru măsurarea strictă a timpului." },
 
   { cat: "Subordonare", dif: 3,
-    q: "Elementul <strong>-nom / -nomie</strong> din <em>astronomie</em>, <em>agronomie</em>, <em>economie</em> înseamnă:",
+    q: "Elementul secund (sufixoidul) <strong>-nom / -nomie</strong> din cuvinte precum <em>astronomie</em> sau <em>economie</em> înseamnă:",
     opts: ["număr", "lege, regulă, administrare", "descriere", "origine"],
     ans: 1,
-    exp: "<strong>-nomie</strong> (gr. <em>nomos</em>) = lege, regulă, administrare: astro-nomie (legile stelelor), eco-nomie (administrarea casei), agro-nomie." },
+    exp: "<strong>-nomie / -nom</strong> provine din grecescul <em>nomos</em> (lege, regulă, organizare): economie = administrarea riguroasă a casei." },
 
   // ═══════════════════════════════════════════════
   // ABREVIERE — NIVEL 3
   // ═══════════════════════════════════════════════
   { cat: "Abreviere", dif: 3,
-    q: "Care este diferența dintre un <strong>acronim</strong> și o <strong>abreviere prin inițiale</strong>?",
-    opts: ["Nu există diferență", "Acronimul se citește ca un cuvânt; abrevierea prin inițiale se citește literă cu literă", "Acronimul are punct; abrevierea nu", "Acronimul provine din greacă; abrevierea din latină"],
+    q: "Care este diferența formală dintre un <strong>acronim</strong> și o <strong>abreviere prin inițiale</strong>?",
+    opts: ["Nu există absolut nicio diferență de citire", "Acronimul se citește cursiv ca un cuvânt; abrevierea prin inițiale se pronunță literă cu literă", "Acronimul poartă obligatoriu punct; abrevierea nu", "Acronimul provine exclusiv din limba greacă veche"],
     ans: 1,
-    exp: "<strong>Acronim</strong>: se citește ca un cuvânt (NATO, TAROM, UNESCO). <strong>Abreviere prin inițiale</strong>: fiecare literă se citește separat (ONU: O-N-U, SUA: S-U-A)." },
+    exp: "<strong>Acronimul</strong> se pronunță legat, ca un cuvânt normal (NATO, UNESCO). <strong>Abrevierea prin inițiale</strong> se silabisește pe baza literelor componente (O-N-U, S-U-A)." },
 
   { cat: "Abreviere", dif: 3,
-    q: "Cuvântul <strong>laser</strong> este un acronim englez. Ce fel de cuvânt a devenit în limba română?",
-    opts: ["A rămas abreviere", "Substantiv comun lexicalizat", "Adjectiv", "Verb"],
+    q: "Cuvântul <strong>laser</strong> este la origine un acronim din limba engleză. Ce statut are astăzi în limba română?",
+    opts: ["A rămas o abreviere tehnică izolată", "A devenit substantiv comun lexicalizat", "Este clasificat ca adjectiv", "A devenit un verb la infinitiv"],
     ans: 1,
-    exp: "<strong>Laser</strong> (Light Amplification by Stimulated Emission of Radiation) a devenit <strong>substantiv comun</strong> în română: un laser, laserul, lasere — complet lexicalizat." },
+    exp: "<strong>Laser</strong> a fost asimilat complet și a devenit un <strong>substantiv comun</strong>: primește articol, formă de plural și se declină normal (un laser, două lasere)." },
 
   { cat: "Abreviere", dif: 3,
-    q: "Care abreviere românească respectă regula <strong>fără punct</strong> la final?",
+    q: "Care dintre următoarele abrevieri se scrie **fără punct** la final conform normelor ortografice?",
     opts: ["prof.", "dl.", "nr.", "UNESCO"],
     ans: 3,
-    exp: "<strong>Simbolurile și acronimele</strong> (UNESCO, ONU, km, l, kg) se scriu <strong>fără punct</strong>. Abrevierile grafice uzuale (prof., dl., nr.) se scriu <strong>cu punct</strong>." },
+    exp: "<strong>Acronimele</strong> (UNESCO, NATO) și <strong>simbolurile internaționale</strong> (km, kg, l) se scriu întotdeauna <strong>fără punct la final</strong>. Abrevierile grafice (prof., dl.) primesc punct." },
 
   { cat: "Abreviere", dif: 3,
-    q: "Cum se numește abrevierea formată din <strong>prima și ultima literă</strong> a cuvântului (ex: <em>dr.</em> pentru <em>doctor</em>)?",
-    opts: ["Acronim", "Abreviere prin contragere", "Simbol", "Abreviere prin trunchiere"],
+    q: "Cum se numește abrevierea realizată prin selectarea primei și ultimei litere dintr-un cuvânt (ex: <em>dr.</em> pentru <em>doctor</em>)?",
+    opts: ["Acronim", "Abreviere prin contragere", "Simbol metric", "Abreviere prin trunchiere"],
     ans: 1,
-    exp: "<strong>Abrevierea prin contragere</strong>: se păstrează prima și ultima literă (și uneori unele din interior): <em>dr.</em> (doctor), <em>str.</em> (stradă), <em>bd.</em> (boulevard)." },
+    exp: "Păstrarea primei și ultimei litere (uneori și a unor litere intermediare) reprezintă o <strong>abreviere prin contragere</strong>: <em>dr.</em> (doctor), <em>str.</em> (stradă)." },
 
   { cat: "Abreviere", dif: 3,
-    q: "Termenul <strong>selfie</strong> este un exemplu de:",
-    opts: ["Compunere prin subordonare", "Derivare cu sufix", "Împrumut lexical adaptat", "Abreviere grafică"],
+    q: "Termenul de origine engleză <strong>selfie</strong> este un exemplu clar de:",
+    opts: ["Compunere prin subordonare", "Derivare internă cu sufix", "Împrumut lexical (neologism)", "Abreviere grafică"],
     ans: 2,
-    exp: "<strong>Selfie</strong> este un <strong>împrumut din engleză</strong> (self + sufix -ie). Nu este o abreviere sau compunere românească, ci un neologism adoptat." },
+    exp: "<strong>Selfie</strong> reprezintă un <strong>împrumut lexical</strong> direct din engleză. Nu provine dintr-un proces de compunere sau derivare realizat pe terenul limbii române." },
 
   // ═══════════════════════════════════════════════
-  // TIPURI MIXTE — NIVEL 3 (recunoaștere și diferențiere)
+  // MIXT — NIVEL 3 (recunoaștere și diferențiere)
   // ═══════════════════════════════════════════════
-  { cat: "Recunoaștere și diferențiere", dif: 3,
-    q: "Identificați procedeul de formare al lui <strong>portmoneu</strong>:",
-    opts: ["Derivare cu prefix", "Compunere prin subordonare (port- + moneu)", "Alăturare sudată", "Abreviere"],
+  { cat: "Mixt", dif: 3,
+    q: "Identificați procedeul exact de formare din spatele cuvântului <strong>portmoneu</strong>:",
+    opts: ["Derivare cu prefix", "Compunere prin subordonare (port- + moneu)", "Alăturare sudată", "Abreviere prin contragere"],
     ans: 1,
-    exp: "<strong>Portmoneu</strong> = <em>port-</em> (poartă, din fr. <em>porter</em>) + <em>monnaie</em> (monedă) → compunere prin subordonare (împrumut din franceză)." },
+    exp: "<strong>Portmoneu</strong> s-a format prin compunere prin subordonare (adaptat după fr. <em>porte-monnaie</em>), unde elementul de origine verbală „port-” determină substantivul." },
 
-  { cat: "Recunoaștere și diferențiere", dif: 3,
-    q: "Care serie conține <strong>trei tipuri diferite</strong> de formare a cuvintelor?",
-    opts: ["binefăcător, bunăstare, curcubeu", "ONU, televizor, biologie", "nedrept, rescrie, dezordine", "floarea-soarelui, câine-lup, gură-cască"],
+  { cat: "Mixt", dif: 3,
+    q: "Care dintre serii conține <strong>trei procedee complet diferite</strong> de îmbogățire a vocabularului?",
+    opts: ["binefăcător, bunăstare, curcubeu", "ONU, muncitor, biologie", "nedrept, rescrie, dezordine", "floarea-soarelui, câine-lup, gură-cască"],
     ans: 1,
-    exp: "<strong>ONU</strong> (abreviere) + <strong>televizor</strong> (derivare cu sufix) + <strong>biologie</strong> (compunere prin subordonare) = trei procedee diferite." },
+    exp: "<strong>ONU</strong> (abreviere) + <strong>muncitor</strong> (derivare cu sufixul <em>-itor</em>) + <strong>biologie</strong> (compunere prin subordonare savantă) reprezintă trei mecanisme complet distincte." },
 
-  { cat: "Recunoaștere și diferențiere", dif: 3,
-    q: "Cuvântul <strong>astronaut</strong> conține elementele de compunere:",
-    opts: ["astro- (stea) + -naut (navigator)", "astro- (spațiu) + -naut (om)", "astru- + naut (vitez)", "astro- (lună) + -naut (călător)"],
+  { cat: "Mixt", dif: 3,
+    q: "Cuvântul <strong>astronaut</strong> conține elementele savante de compunere:",
+    opts: ["astro- (stea) + -naut (navigator)", "astro- (spațiu) + -naut (om)", "astru- + naut (viteză)", "astro- (lună) + -naut (călător)"],
     ans: 0,
-    exp: "<strong>Astro-</strong> (gr. <em>astron</em> = stea, corp ceresc) + <strong>-naut</strong> (gr. <em>nautes</em> = navigator, marinar) → astronaut = navigator printre stele." },
+    exp: "<strong>Astro-</strong> (gr. <em>astron</em> = stea, corp ceresc) + <strong>-naut</strong> (gr. <em>nautes</em> = navigator, marinar) → navigator printre stele." },
 
-  { cat: "Recunoaștere și diferențiere", dif: 3,
-    q: "Care este procedeul prin care <strong>meci</strong>, <strong>fotbal</strong>, <strong>computer</strong> au intrat în limba română?",
-    opts: ["Derivare internă", "Compunere prin subordonare", "Împrumut lexical (neologism)", "Abreviere prin contragere"],
+  { cat: "Mixt", dif: 3,
+    q: "Prin ce procedeu principal au intrat cuvinte ca <strong>meci</strong>, <strong>fotbal</strong> sau <strong>computer</strong> în limba română?",
+    opts: ["Derivare internă cu sufixe autonome", "Compunere prin subordonare", "Împrumut lexical (neologism)", "Abreviere prin contragere metrică"],
     ans: 2,
-    exp: "<strong>Împrumutul lexical</strong>: cuvinte preluate din alte limbi (engleză) și adaptate fonetic și morfologic sistemului românesc." },
+    exp: "Aceste cuvinte au intrat în vocabular ca <strong>împrumuturi lexicale</strong> (neologisme din limba engleză), adaptate treptat la normele fonetice și morfologice românești." },
 
-  { cat: "Recunoaștere și diferențiere", dif: 3,
-    q: "Prin ce procedeu s-a format cuvântul <strong>electrocardiogramă</strong>?",
-    opts: ["Alăturare cu cratimă", "Compunere prin subordonare cu trei elemente savante", "Derivare cu prefix și sufix", "Abreviere lexicalizată"],
+  { cat: "Mixt", dif: 3,
+    q: "Prin ce procedeu complex s-a format termenul medical <strong>electrocardiogramă</strong>?",
+    opts: ["Alăturare cu cratimă", "Compunere prin subordonare cu trei elemente savante", "Derivare simultană cu prefix și sufix", "Abreviere lexicalizată complet"],
     ans: 1,
-    exp: "<strong>Electro-</strong> (electricitate) + <strong>cardio-</strong> (inimă) + <strong>-gramă</strong> (înregistrare scrisă) → compunere prin subordonare cu trei elemente de origine greacă." },
+    exp: "<strong>Electro-</strong> (electricitate) + <strong>cardio-</strong> (inimă) + <strong>-gramă</strong> (înregistrare scrisă). Este o compunere prin subordonare realizată din trei elemente savante." },
 
-  { cat: "Recunoaștere și diferențiere", dif: 3,
-    q: "Care enunț despre compunere este <strong>corect</strong>?",
+  { cat: "Mixt", dif: 3,
+    q: "Care dintre următoarele enunțuri generale despre compunere este **adevărat**?",
     opts: [
-      "Toate cuvintele compuse se scriu cu cratimă",
-      "Compunerea și derivarea sunt același procedeu",
+      "Toate cuvintele compuse se scriu obligatoriu cu cratimă",
+      "Compunerea și derivarea reprezintă exact același procedeu",
       "Prin compunere se unesc cel puțin două cuvinte sau elemente de compunere pentru a forma un cuvânt nou",
-      "Abrevierea este un tip de derivare"
+      "Abrevierea este clasificată academic ca un tip de derivare"
     ],
     ans: 2,
-    exp: "<strong>Compunerea</strong> = procedeu de formare a cuvintelor noi prin unirea a cel puțin două cuvinte sau elemente de compunere. Unele se scriu sudat, altele cu cratimă, altele separat." }
+    exp: "<strong>Compunerea</strong> presupune unirea a cel puțin două cuvinte cu sens de sine stătător sau elemente savante de compunere pentru a genera o unitate semantică nouă. Scrierea lor poate fi sudată, cu cratimă sau separată." }
 ];
 
 const cats = [...new Set(QUESTIONS.map(q => q.cat))];
